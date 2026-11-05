@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Entrega - Sistema Web de Votaciones, Festival de la Leyenda Vallenata</title>
+<style>
+  @page { size: A4; margin: 18mm 16mm 20mm 16mm; }
+  :root { --ink:#1a1230; --brand:#4b2a9b; --brand-d:#341b72; --gold:#f2a900; --muted:#5f5a78; --soft:#f4f1fb; }
+  * { box-sizing: border-box; }
+  body { font-family: 'Segoe UI', 'Inter', Arial, sans-serif; color: var(--ink); font-size: 10.5pt; line-height: 1.5; margin: 0; }
+  h1, h2, h3 { font-family: 'Segoe UI Semibold', 'Segoe UI', Arial, sans-serif; color: var(--brand-d); line-height: 1.25; }
+  h2 { font-size: 17pt; margin: 0 0 4mm; padding-bottom: 2mm; border-bottom: 3px solid var(--gold); }
+  h3 { font-size: 12pt; margin: 6mm 0 2mm; }
+  p { margin: 0 0 3mm; text-align: justify; }
+  .page-break { break-before: page; }
+  .avoid { break-inside: avoid; }
+  .muted { color: var(--muted); }
+  /* marcadores de datos pendientes */
+  .ph { background: #fff3b0; color: #6b4800; padding: 0 3px; border-radius: 3px; font-weight: 600; }
+
+  /* Portada */
+  .cover { height: 255mm; display: flex; flex-direction: column; justify-content: space-between; break-after: page; }
+  .cover-band { background: linear-gradient(135deg, #1a1230, #4b2a9b 65%, #8a1fa0); color: #fff; border-radius: 6mm; padding: 14mm 12mm; position: relative; overflow: hidden; }
+  .cover-band .photo { position:absolute; inset:0; background: url('capturas/portada.png') center 20% / cover; opacity: .28; }
+  .cover-band > * { position: relative; }
+  .cover small { letter-spacing: .16em; text-transform: uppercase; color: var(--gold); font-weight: 700; font-size: 9pt; }
+  .cover h1 { color: #fff; font-size: 27pt; margin: 4mm 0 3mm; }
+  .cover .sub { color: #e4def8; font-size: 12pt; }
+  .meta-table { width: 100%; border-collapse: collapse; margin-top: 8mm; }
+  .meta-table td { padding: 3mm 4mm; vertical-align: top; }
+  .meta-table tr:nth-child(odd) td { background: var(--soft); }
+  .meta-table td:first-child { width: 42mm; font-weight: 700; color: var(--brand-d); }
+
+  /* Tablas */
+  table.t { width: 100%; border-collapse: collapse; margin: 2mm 0 4mm; font-size: 9.5pt; }
+  table.t th { background: var(--brand-d); color: #fff; text-align: left; padding: 2mm 3mm; font-weight: 600; }
+  table.t td { padding: 2mm 3mm; vertical-align: top; }
+  table.t tr:nth-child(even) td { background: var(--soft); }
+  .ok { color: #11733a; font-weight: 700; }
+
+  /* Codigo */
+  pre { background: #15102a; color: #e9e4fb; border-radius: 3mm; padding: 4mm 5mm; font-family: Consolas, 'Cascadia Mono', monospace; font-size: 8.3pt; line-height: 1.45; white-space: pre-wrap; word-break: break-word; margin: 2mm 0 4mm; break-inside: avoid; }
+  pre .c { color: #9a90c0; }
+  .file { display: inline-block; background: var(--soft); color: var(--brand-d); border-radius: 2mm; padding: 0 3mm; font-family: Consolas, monospace; font-size: 8.5pt; font-weight: 700; margin-bottom: 1mm; }
+  code { font-family: Consolas, monospace; background: var(--soft); padding: 0 3px; border-radius: 2px; font-size: 9.2pt; }
+
+  /* Capturas */
+  figure { margin: 0 0 6mm; break-inside: avoid; }
+  figure img { width: 92%; margin: 0 auto; display: block; border-radius: 3mm; box-shadow: 0 0 0 1px #d9d3ee; }
+  figure.half img { width: 70%; margin: 0 auto; }
+  figcaption { background: var(--soft); border-left: 4px solid var(--gold); padding: 2.5mm 4mm; margin-top: 2mm; border-radius: 0 2mm 2mm 0; font-size: 9.5pt; }
+  figcaption b { color: var(--brand-d); }
+  .callout { background: #fff8e1; border-left: 4px solid var(--gold); padding: 3mm 4mm; border-radius: 0 2mm 2mm 0; margin: 3mm 0 4mm; font-size: 9.8pt; }
+  ul { margin: 0 0 3mm; padding-left: 6mm; } li { margin-bottom: 1mm; }
+  .toc li { margin-bottom: 1.5mm; }
+</style>
+</head>
+<body>
+
+<!-- ===================== 1. PORTADA ===================== -->
+<section class="cover">
+  <div class="cover-band">
+    <div class="photo"></div>
+    <small>Entrega oficial · Desarrollo Web</small>
+    <h1>Sistema Web de Votaciones<br>Festival de la Leyenda Vallenata</h1>
+    <div class="sub">Edición → Categoría → Votación → Opción → Voto</div>
+  </div>
+
+  <table class="meta-table">
+    <tr><td>Institución</td><td><span class="ph">[Nombre de la institución]</span></td></tr>
+    <tr><td>Programa</td><td><span class="ph">[Nombre del programa académico]</span></td></tr>
+    <tr><td>Asignatura</td><td><span class="ph">[Desarrollo Web / nombre exacto de la asignatura]</span></td></tr>
+    <tr><td>Nombre del proyecto</td><td>Sistema Web de Votaciones – Festival de la Leyenda Vallenata 2027</td></tr>
+    <tr><td>Fecha</td><td>24 de octubre de 2026</td></tr>
+    <tr><td>Integrantes</td><td>
+      1. <span class="ph">[Nombre completo del integrante 1]</span><br>
+      2. <span class="ph">[Nombre completo del integrante 2]</span><br>
+      3. <span class="ph">[Nombre completo del integrante 3]</span><br>
+      4. <span class="ph">[Nombre completo del integrante 4]</span>
+    </td></tr>
+    <tr><td>Tecnologías</td><td>Laravel 13 (PHP 8.3) · MySQL 8.4 · Docker · Bootstrap 5 · phpMyAdmin</td></tr>
+  </table>
+
+  <div class="muted" style="font-size:9pt">Proyecto desarrollado con Laravel, con autorización del docente, en lugar de Django. Los conceptos solicitados (modelos, relaciones, migraciones, autenticación, panel administrativo e interfaz pública con datos reales de MySQL) se implementaron con las herramientas equivalentes del ecosistema Laravel.</div>
+</section>
+
+<!-- ===================== 2. INTRODUCCION ===================== -->
+<section>
+  <h2>2. Introducción y objetivo</h2>
+  <p>El Festival de la Leyenda Vallenata requiere una plataforma web donde el público pueda participar en votaciones organizadas por edición anual y por categoría (por ejemplo, canciones o baile). Este documento presenta los avances del proyecto: una aplicación web funcional, conectada a una base de datos MySQL, con autenticación de usuarios, un panel administrativo para cargar la información y una interfaz pública que muestra datos reales almacenados en la base de datos.</p>
+  <p><b>Objetivo general.</b> Construir un sistema de votaciones configurable, seguro y auditable, que permita registrar ediciones del Festival, categorías vinculadas a cada edición, votaciones con sus opciones participantes y los votos de los usuarios autenticados.</p>
+  <p><b>Relación con el proyecto.</b> Los avances cubren la estructura de datos esperada (<i>Edición → Categoría → Votación → Opción</i>), la futura incorporación de votos y sus restricciones (ya implementadas), la autenticación y las interfaces de administración y de consulta pública.</p>
+
+  <h3>Herramientas utilizadas y equivalencias con la ruta sugerida</h3>
+  <p>Por acuerdo con el docente, el proyecto se desarrolló con Laravel y Docker. La siguiente tabla relaciona cada elemento de la ruta sugerida con su equivalente en este proyecto:</p>
+  <table class="t">
+    <tr><th>Elemento solicitado</th><th>Cómo se resolvió en este proyecto</th></tr>
+    <tr><td>Proyecto Django, aplicaciones, rutas, vistas y plantillas</td><td>Proyecto Laravel: rutas en <code>routes/web.php</code>, controladores, vistas Blade (plantillas) y modelos Eloquent.</td></tr>
+    <tr><td>Patrón MVT</td><td>Patrón MVC: Modelos (<code>app/Models</code>), Vistas Blade (<code>resources/views</code>) y Controladores (<code>app/Http/Controllers</code>).</td></tr>
+    <tr><td>MySQL, modelos relacionados y migraciones</td><td>MySQL 8.4 en contenedor Docker; modelos Eloquent con relaciones; migraciones de Laravel (<code>php artisan migrate</code>).</td></tr>
+    <tr><td>Django Admin y datos de prueba</td><td>Panel administrativo propio (<code>/admin</code>) con gestión de ediciones, categorías, votaciones y opciones; datos de prueba mediante seeders.</td></tr>
+    <tr><td>Registro, inicio y cierre de sesión</td><td>Autenticación de Laravel (sesiones, contraseñas con hash) con roles <i>administrador</i> y <i>votante</i>.</td></tr>
+    <tr><td>Interfaz pública con datos reales de MySQL</td><td>Páginas públicas en Blade que consultan MySQL mediante Eloquent.</td></tr>
+  </table>
+</section>
+
+<!-- ===================== 3. DESARROLLO TECNICO ===================== -->
+<section class="page-break">
+  <h2>3. Desarrollo técnico</h2>
+
+  <h3>3.1 Estructura del proyecto Laravel</h3>
+  <table class="t">
+    <tr><th>Carpeta / archivo</th><th>Contenido</th></tr>
+    <tr><td><code>routes/web.php</code></td><td>Rutas públicas, de autenticación, de votante y del panel administrativo (con middleware).</td></tr>
+    <tr><td><code>app/Models</code></td><td>Edicion, Categoria, Votacion, Opcion, Voto, User y Bitacora.</td></tr>
+    <tr><td><code>app/Http/Controllers</code></td><td><code>AuthController</code>, <code>PublicoController</code> y, en <code>Admin/</code>, los controladores de ediciones, categorías, votaciones, panel y reportes.</td></tr>
+    <tr><td><code>app/Http/Middleware/EsAdmin.php</code></td><td>Restringe el panel administrativo a usuarios con rol administrador.</td></tr>
+    <tr><td><code>app/Services/ReporteExcel.php</code></td><td>Generación del reporte de votaciones en Excel.</td></tr>
+    <tr><td><code>database/migrations</code></td><td>Definición versionada de las tablas de MySQL.</td></tr>
+    <tr><td><code>database/seeders</code></td><td>Datos de prueba (edición, categorías, votación y opciones de ejemplo).</td></tr>
+    <tr><td><code>resources/views</code></td><td>25 plantillas Blade: sitio público, autenticación y administración.</td></tr>
+    <tr><td><code>tests/Feature</code></td><td>Pruebas automáticas de las reglas de votación, páginas públicas y reportes.</td></tr>
+    <tr><td><code>Dockerfile</code>, <code>docker-compose.yml</code></td><td>Entorno reproducible: aplicación, MySQL y phpMyAdmin.</td></tr>
+  </table>
+
+  <h3>3.2 Arquitectura MVC</h3>
+  <p>Una petición entra por <code>routes/web.php</code>, que la dirige a un <b>controlador</b>. Este consulta los <b>modelos</b> (que leen y escriben en MySQL mediante Eloquent) y entrega los datos a una <b>vista Blade</b>, que genera el HTML. Por ejemplo, al abrir <code>/categorias/1</code> se ejecuta <code>PublicoController@categoria</code>, que carga la categoría con su edición y sus votaciones y renderiza <code>categoria.blade.php</code>.</p>
+
+  <h3>3.3 Entorno con Docker y conexión a MySQL</h3>
+  <p>La aplicación se ejecuta con tres contenedores definidos en <code>docker-compose.yml</code>:</p>
+  <table class="t">
+    <tr><th>Contenedor</th><th>Imagen</th><th>Función</th><th>Puerto</th></tr>
+    <tr><td>votaciones_app</td><td>PHP 8.3 + Apache (Dockerfile propio)</td><td>Aplicación Laravel</td><td>8080</td></tr>
+    <tr><td>votaciones_db</td><td>mysql:8.4</td><td>Base de datos MySQL</td><td>3307 (host)</td></tr>
+    <tr><td>votaciones_pma</td><td>phpmyadmin:5</td><td>Administración visual de MySQL</td><td>8081</td></tr>
+  </table>
+  <p>La conexión a MySQL se configura mediante variables de entorno (<code>DB_CONNECTION=mysql</code>, <code>DB_HOST=db</code>, <code>DB_PORT=3306</code>, <code>DB_DATABASE</code>, <code>DB_USERNAME</code> y <code>DB_PASSWORD</code>), que Laravel lee en <code>config/database.php</code>. Por seguridad, los valores de usuario y contraseña no se incluyen en este documento. Al iniciar, el script <code>docker/entrypoint.sh</code> espera a MySQL, ejecuta las migraciones y siembra los datos de prueba.</p>
+
+  <h3>3.4 Modelos y relaciones</h3>
+  <p>El modelo de datos sigue la estructura esperada: <b>Edición → Categoría → Votación → Opción</b>, con la tabla de <b>votos</b> que relaciona al usuario, la votación y la opción elegida.</p>
+
+  <figure class="avoid">
+  <svg viewBox="0 0 1000 400" xmlns="http://www.w3.org/2000/svg" style="width:100%;font-family:Segoe UI,Arial,sans-serif">
+    <defs><marker id="a" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4b2a9b"/></marker></defs>
+    <!-- fila 1 -->
+    <g>
+      <rect x="10"  y="20" width="205" height="150" rx="10" fill="#f4f1fb" stroke="#4b2a9b" stroke-width="1.5"/><rect x="10" y="20" width="205" height="30" rx="10" fill="#341b72"/><text x="112" y="41" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">ediciones</text>
+      <text x="22" y="72" font-size="13">id (PK)</text><text x="22" y="94" font-size="13">nombre</text><text x="22" y="116" font-size="13">anio (único)</text><text x="22" y="138" font-size="13">descripcion</text><text x="22" y="160" font-size="13">activa</text>
+      <rect x="270" y="20" width="205" height="150" rx="10" fill="#f4f1fb" stroke="#4b2a9b" stroke-width="1.5"/><rect x="270" y="20" width="205" height="30" rx="10" fill="#341b72"/><text x="372" y="41" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">categorias</text>
+      <text x="282" y="72" font-size="13">id (PK)</text><text x="282" y="94" font-size="13">edicion_id (FK)</text><text x="282" y="116" font-size="13">nombre (único por edición)</text><text x="282" y="138" font-size="13">descripcion</text><text x="282" y="160" font-size="13">activa</text>
+      <rect x="530" y="20" width="215" height="150" rx="10" fill="#f4f1fb" stroke="#4b2a9b" stroke-width="1.5"/><rect x="530" y="20" width="215" height="30" rx="10" fill="#341b72"/><text x="637" y="41" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">votaciones</text>
+      <text x="542" y="72" font-size="13">id (PK)</text><text x="542" y="94" font-size="13">categoria_id (FK)</text><text x="542" y="116" font-size="13">titulo, descripcion, estado</text><text x="542" y="138" font-size="13">apertura, cierre</text><text x="542" y="160" font-size="13">votos_por_usuario</text>
+      <rect x="800" y="20" width="190" height="150" rx="10" fill="#f4f1fb" stroke="#4b2a9b" stroke-width="1.5"/><rect x="800" y="20" width="190" height="30" rx="10" fill="#341b72"/><text x="895" y="41" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">opciones</text>
+      <text x="812" y="72" font-size="13">id (PK)</text><text x="812" y="94" font-size="13">votacion_id (FK)</text><text x="812" y="116" font-size="13">nombre</text><text x="812" y="138" font-size="13">descripcion</text><text x="812" y="160" font-size="13">imagen</text>
+    </g>
+    <g stroke="#4b2a9b" stroke-width="2" fill="none" marker-end="url(#a)">
+      <line x1="215" y1="95" x2="268" y2="95"/><line x1="475" y1="95" x2="528" y2="95"/><line x1="745" y1="95" x2="798" y2="95"/>
+    </g>
+    <g font-size="12" fill="#4b2a9b" font-weight="700" text-anchor="middle"><text x="242" y="86">1 : N</text><text x="502" y="86">1 : N</text><text x="772" y="86">1 : N</text></g>
+    <!-- fila 2 -->
+    <rect x="270" y="270" width="215" height="115" rx="10" fill="#fff8e1" stroke="#f2a900" stroke-width="2"/><rect x="270" y="270" width="215" height="30" rx="10" fill="#f2a900"/><text x="377" y="291" fill="#2b1d00" font-size="15" font-weight="700" text-anchor="middle">votos</text>
+    <text x="282" y="322" font-size="13">id (PK)</text><text x="282" y="342" font-size="13">user_id (FK) · votacion_id (FK)</text><text x="282" y="362" font-size="13">opcion_id (FK) · created_at</text><text x="282" y="380" font-size="11" fill="#6b4800">único (user, votación, opción)</text>
+    <rect x="10" y="270" width="205" height="115" rx="10" fill="#f4f1fb" stroke="#4b2a9b" stroke-width="1.5"/><rect x="10" y="270" width="205" height="30" rx="10" fill="#341b72"/><text x="112" y="291" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">users</text>
+    <text x="22" y="322" font-size="13">id (PK)</text><text x="22" y="342" font-size="13">name, email (único)</text><text x="22" y="362" font-size="13">password (hash)</text><text x="22" y="380" font-size="13">rol (admin | votante)</text>
+    <g stroke="#4b2a9b" stroke-width="2" fill="none" marker-end="url(#a)">
+      <line x1="215" y1="327" x2="268" y2="327"/>
+      <path d="M485,327 C640,327 640,230 637,172"/>
+      <path d="M485,350 C760,350 895,300 895,172"/>
+    </g>
+    <g font-size="12" fill="#4b2a9b" font-weight="700"><text x="222" y="318">1 : N</text><text x="600" y="262">N : 1</text><text x="760" y="338">N : 1</text></g>
+  </svg>
+  <figcaption><b>Figura 1. Diagrama entidad-relación.</b> Cada nivel se vincula al anterior mediante una llave foránea con borrado en cascada. La tabla <i>votos</i> une al usuario, la votación y la opción elegida.</figcaption>
+  </figure>
+
+  <h3>3.5 Migraciones</h3>
+  <p>Las tablas se crean con migraciones versionadas. El estado de las migraciones ejecutadas en MySQL, obtenido con <code>php artisan migrate:status</code>, es el siguiente:</p>
+  <pre>  Migration name .............................................. Batch / Status
+  0001_01_01_000000_create_users_table ............................... [1] Ran
+  0001_01_01_000001_create_cache_table ............................... [1] Ran
+  0001_01_01_000002_create_jobs_table ................................ [1] Ran
+  2026_10_24_193947_create_edicions_table ............................ [1] Ran
+  2026_10_24_193948_create_categorias_table .......................... [1] Ran
+  2026_10_24_193949_create_votacions_table ........................... [1] Ran
+  2026_10_24_193950_create_opcions_table ............................. [1] Ran
+  2026_10_24_193951_create_votos_table ............................... [1] Ran
+  2026_10_24_200000_add_rol_to_users_table ........................... [1] Ran
+  2026_10_24_200001_create_bitacora_table ............................ [1] Ran</pre>
+
+  <h3>3.6 Autenticación y autorización</h3>
+  <ul>
+    <li><b>Registro:</b> validación de datos, aceptación del tratamiento de datos personales y contraseña guardada con hash.</li>
+    <li><b>Inicio y cierre de sesión:</b> sesión con regeneración de identificador, opción "mantener sesión" y cierre con invalidación de la sesión.</li>
+    <li><b>Protección contra fuerza bruta:</b> bloqueo de 5 minutos tras 5 intentos fallidos por correo e IP; el mensaje de error no revela si el correo existe.</li>
+    <li><b>Roles:</b> <i>administrador</i> y <i>votante</i>. El middleware <code>EsAdmin</code> impide que un votante acceda al panel (respuesta 403).</li>
+    <li><b>Bitácora:</b> se registran los inicios de sesión y las acciones administrativas.</li>
+  </ul>
+
+  <h3>3.7 Reglas de votación implementadas</h3>
+  <table class="t">
+    <tr><th>Regla</th><th>Descripción</th></tr>
+    <tr><td>RN-02</td><td>Solo se vota en votaciones abiertas y dentro de su periodo de apertura y cierre.</td></tr>
+    <tr><td>RN-03</td><td>Solo pueden votar usuarios autenticados.</td></tr>
+    <tr><td>RN-04</td><td>Una votación requiere al menos 2 opciones para poder abrirse.</td></tr>
+    <tr><td>RN-06</td><td>Límite de votos por usuario, configurable en cada votación.</td></tr>
+    <tr><td>RN-08</td><td>Los resultados son públicos solo si el administrador lo habilita.</td></tr>
+    <tr><td>RN-09</td><td>No se elimina lo que ya tiene votos registrados.</td></tr>
+    <tr><td>Integridad</td><td>La opción debe pertenecer a la votación; no se repite el voto por la misma opción; transacción con bloqueo para evitar votos duplicados concurrentes.</td></tr>
+  </table>
+  <div class="callout">Las categorías, votaciones y opciones sembradas son <b>ejemplos ilustrativos</b>; las reglas no confirmadas por el cliente (por ejemplo, el texto legal de tratamiento de datos y la inmutabilidad del voto) están marcadas en la aplicación como <i>pendientes de validación</i>.</div>
+</section>
+
+<!-- ===================== 4. CAPTURAS ===================== -->
+<section class="page-break">
+  <h2>4. Capturas de pantalla comentadas</h2>
+
+  <h3>4.1 Base de datos MySQL (phpMyAdmin)</h3>
+  <figure>
+    <img src="capturas/30_mysql_tablas.png" alt="Tablas de MySQL">
+    <figcaption><b>Figura 2. Base de datos <code>votaciones</code> en MySQL.</b> Demuestra que las migraciones crearon las tablas del modelo (<i>ediciones, categorias, votaciones, opciones, votos, users, bitacora</i>) y que contienen datos reales: 1 edición, 2 categorías, 1 votación, 3 opciones y 1 voto.</figcaption>
+  </figure>
+  <figure>
+    <img src="capturas/31_mysql_votos.png" alt="Tabla votos">
+    <figcaption><b>Figura 3. Tabla <code>votos</code>.</b> Muestra el registro del voto emitido desde la aplicación: usuario, votación y opción. Evidencia que la interfaz pública escribe en MySQL.</figcaption>
+  </figure>
+
+  <h3 class="page-break">4.2 Interfaz pública</h3>
+  <figure>
+    <img src="capturas/01_home.png" alt="Inicio">
+    <figcaption><b>Figura 4. Página de inicio.</b> Muestra la edición activa y sus categorías, leídas dinámicamente de MySQL. Cada categoría indica cuántas votaciones abiertas tiene.</figcaption>
+  </figure>
+  <figure>
+    <img src="capturas/02_ediciones.png" alt="Ediciones">
+    <figcaption><b>Figura 5. Consulta de ediciones.</b> Lista todas las ediciones anuales registradas, con su estado y número de categorías.</figcaption>
+  </figure>
+  <figure>
+    <img src="capturas/03_edicion_detalle.png" alt="Detalle de edición">
+    <figcaption><b>Figura 6. Detalle de una edición.</b> Presenta las categorías vinculadas a la edición, demostrando la relación Edición → Categoría.</figcaption>
+  </figure>
+  <figure>
+    <img src="capturas/04_categoria.png" alt="Categoría">
+    <figcaption><b>Figura 7. Categoría y sus votaciones.</b> Muestra las votaciones de la categoría con estado, número de opciones y fecha de cierre (relación Categoría → Votación).</figcaption>
+  </figure>
+  <figure>
+    <img src="capturas/05_votacion_invitado.png" alt="Votación como invitado">
+    <figcaption><b>Figura 8. Votación vista por un visitante.</b> Se listan las opciones (relación Votación → Opción), pero se bloquea el voto y se invita a iniciar sesión: demuestra la regla de que solo votan usuarios autenticados.</figcaption>
+  </figure>
+
+  <h3 class="page-break">4.3 Autenticación</h3>
+  <figure>
+    <img src="capturas/06_registro.png" alt="Registro">
+    <figcaption><b>Figura 9. Registro de usuarios.</b> Formulario con validación y aceptación del tratamiento de datos.</figcaption>
+  </figure>
+  <figure>
+    <img src="capturas/07_login.png" alt="Inicio de sesión">
+    <figcaption><b>Figura 10. Inicio de sesión.</b> Pantalla de acceso con opción de mantener la sesión y mostrar/ocultar la contraseña.</figcaption>
+  </figure>
+  <figure>
+    <img src="capturas/08_login_error.png" alt="Error de login">
+    <figcaption><b>Figura 11. Credenciales incorrectas.</b> El mensaje es genérico y no revela si el correo existe; tras 5 intentos fallidos el acceso se bloquea temporalmente.</figcaption>
+  </figure>
+
+  <h3 class="page-break">4.4 Flujo de votación de un usuario</h3>
+  <figure>
+    <img src="capturas/10_votacion_opcion_elegida.png" alt="Opción elegida">
+    <figcaption><b>Figura 12. Selección de opción.</b> Con la sesión iniciada, el votante elige una opción (paso 3 del proceso).</figcaption>
+  </figure>
+  <figure>
+    <img src="capturas/11_confirmar_voto.png" alt="Confirmar voto">
+    <figcaption><b>Figura 13. Confirmación.</b> Pantalla previa que muestra la opción elegida y advierte que el voto no podrá modificarse.</figcaption>
+  </figure>
+  <figure>
+    <img src="capturas/12_voto_registrado.png" alt="Voto registrado">
+    <figcaption><b>Figura 14. Voto registrado.</b> Confirma que el voto se guardó en la tabla <i>votos</i> de MySQL.</figcaption>
+  </figure>
+  <figure>
+    <img src="capturas/13_votacion_ya_voto.png" alt="Ya votó">
+    <figcaption><b>Figura 15. Límite de votos.</b> Al volver a la votación se informa que el usuario ya usó su voto y se marca su opción; el sistema no permite votar de nuevo (RN-06).</figcaption>
+  </figure>
+  <figure class="half">
+    <img src="capturas/14_acceso_denegado_votante.png" alt="Acceso denegado">
+    <figcaption><b>Figura 16. Control de roles.</b> Un votante que intenta abrir <code>/admin</code> recibe el error 403: solo los administradores acceden al panel.</figcaption>
+  </figure>
+
+  <h3 class="page-break">4.5 Panel administrativo</h3>
+  <figure>
+    <img src="capturas/20_admin_panel.png" alt="Panel">
+    <figcaption><b>Figura 17. Panel de administración.</b> Indicadores (ediciones, categorías, votaciones abiertas, votantes y votos), votaciones con más votos y bitácora de actividad reciente, todo calculado desde MySQL. Sustituye a Django Admin como interfaz de gestión.</figcaption>
+  </figure>
+  <figure>
+    <img src="capturas/21_admin_ediciones.png" alt="Ediciones admin">
+    <figcaption><b>Figura 18. Gestión de ediciones.</b> Listado con acciones de crear, editar y eliminar (CRUD) y estado activo/inactivo.</figcaption>
+  </figure>
+  <figure>
+    <img src="capturas/22_admin_edicion_form.png" alt="Formulario de edición">
+    <figcaption><b>Figura 19. Registro de una edición.</b> Formulario con nombre, año, descripción y estado; los datos se validan en el servidor antes de guardarse.</figcaption>
+  </figure>
+  <figure>
+    <img src="capturas/23_admin_categorias.png" alt="Categorías admin">
+    <figcaption><b>Figura 20. Gestión de categorías.</b> Cada categoría está vinculada a una edición, como pide la estructura de datos.</figcaption>
+  </figure>
+  <figure>
+    <img src="capturas/24_admin_votaciones.png" alt="Votaciones admin">
+    <figcaption><b>Figura 21. Gestión de votaciones.</b> Listado con categoría, número de opciones, votos recibidos y estado.</figcaption>
+  </figure>
+  <figure>
+    <img src="capturas/25_admin_votacion_gestion.png" alt="Gestión de votación">
+    <figcaption><b>Figura 22. Administración de una votación.</b> Permite abrir/cerrar la votación, publicar resultados, agregar y quitar opciones participantes y ver los resultados con porcentajes.</figcaption>
+  </figure>
+  <figure>
+    <img src="capturas/26_admin_reportes.png" alt="Reportes Excel">
+    <figcaption><b>Figura 23. Reportes en Excel.</b> El administrador descarga un archivo con resumen, resultados, votaciones y detalle de votos, filtrando por edición y por categoría (por ejemplo, solo canciones o solo baile).</figcaption>
+  </figure>
+</section>
+
+<!-- ===================== 5. CODIGO ===================== -->
+<section class="page-break">
+  <h2>5. Código relevante</h2>
+  <p>Se presentan solo los fragmentos necesarios para explicar la estructura de datos, las relaciones, las rutas, la autenticación y la regla central de votación.</p>
+
+  <h3>5.1 Migración de la tabla <code>votos</code></h3>
+  <span class="file">database/migrations/2026_10_24_193951_create_votos_table.php</span>
+<pre>Schema::create('votos', function (Blueprint $table) {
+    $table->id();
+    $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+    $table->foreignId('votacion_id')->constrained('votaciones')->cascadeOnDelete();
+    $table->foreignId('opcion_id')->constrained('opciones')->cascadeOnDelete();
+    $table->timestamps();
+    <span class="c">// un usuario no puede votar dos veces por la misma opción</span>
+    $table->unique(['user_id', 'votacion_id', 'opcion_id']);
+});</pre>
+  <p>Las llaves foráneas garantizan la integridad referencial y la restricción única evita votos duplicados a nivel de base de datos.</p>
+
+  <h3>5.2 Relaciones entre modelos</h3>
+  <span class="file">app/Models/Edicion.php · Categoria.php · Votacion.php · Opcion.php</span>
+<pre><span class="c">// Edicion</span>
+public function categorias(): HasMany { return $this->hasMany(Categoria::class); }
+
+<span class="c">// Categoria</span>
+public function edicion(): BelongsTo   { return $this->belongsTo(Edicion::class); }
+public function votaciones(): HasMany  { return $this->hasMany(Votacion::class); }
+
+<span class="c">// Votacion</span>
+public function categoria(): BelongsTo { return $this->belongsTo(Categoria::class); }
+public function opciones(): HasMany    { return $this->hasMany(Opcion::class); }
+public function votos(): HasMany       { return $this->hasMany(Voto::class); }
+
+<span class="c">// Opcion</span>
+public function votacion(): BelongsTo  { return $this->belongsTo(Votacion::class); }
+public function votos(): HasMany       { return $this->hasMany(Voto::class); }</pre>
+
+  <h3>5.3 Rutas</h3>
+  <span class="file">routes/web.php</span>
+<pre>Route::get('/', [PublicoController::class, 'home'])->name('home');
+Route::get('/ediciones', [PublicoController::class, 'ediciones'])->name('ediciones');
+Route::get('/ediciones/{edicion}', [PublicoController::class, 'edicion'])->name('edicion');
+Route::get('/categorias/{categoria}', [PublicoController::class, 'categoria'])->name('categoria');
+Route::get('/votaciones/{votacion}', [PublicoController::class, 'votacion'])->name('votacion');
+
+Route::middleware('auth')->group(function () {
+    Route::post('/salir', [AuthController::class, 'logout'])->name('logout');
+    Route::post('/votaciones/{votacion}/votar', [PublicoController::class, 'votar'])
+        ->middleware('throttle:30,1')->name('votacion.votar');
+});
+
+Route::middleware(['auth', EsAdmin::class])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', [Admin\PanelController::class, 'index'])->name('panel');
+    Route::resource('ediciones', Admin\EdicionController::class)->parameters(['ediciones' => 'edicion'])->except('show');
+    Route::resource('categorias', Admin\CategoriaController::class)->except('show');
+    Route::resource('votaciones', Admin\VotacionController::class)->parameters(['votaciones' => 'votacion']);
+    Route::get('reportes/excel', [Admin\ReporteController::class, 'exportar'])->name('reportes.excel');
+});</pre>
+
+  <h3>5.4 Autenticación: inicio de sesión</h3>
+  <span class="file">app/Http/Controllers/AuthController.php</span>
+<pre>$clave = Str::lower($credenciales['email']).'|'.$request->ip();
+
+if (RateLimiter::tooManyAttempts($clave, 5)) {
+    return back()->withErrors(['throttle' => 'Demasiados intentos fallidos. Intenta de nuevo más tarde.']);
+}
+
+if (! Auth::attempt($credenciales, $request->boolean('recordar'))) {
+    RateLimiter::hit($clave, 300);
+    return back()->withErrors(['email' => 'Correo o contraseña incorrectos.'])->onlyInput('email');
+}
+
+RateLimiter::clear($clave);
+$request->session()->regenerate();
+Bitacora::registrar('Inicio de sesión', $request->ip());</pre>
+
+  <h3>5.5 Autorización: middleware de administrador</h3>
+  <span class="file">app/Http/Middleware/EsAdmin.php</span>
+<pre>public function handle(Request $request, Closure $next): Response
+{
+    abort_unless($request->user()?->esAdmin(), 403, 'Acceso solo para administradores.');
+
+    return $next($request);
+}</pre>
+
+  <h3>5.6 Regla central: registrar un voto</h3>
+  <span class="file">app/Http/Controllers/PublicoController.php</span>
+<pre>$error = DB::transaction(function () use ($votacion, $datos, $user) {
+    <span class="c">// Bloqueo para evitar votos duplicados concurrentes.</span>
+    $votacion = Votacion::whereKey($votacion->id)->lockForUpdate()->first();
+
+    if (! $votacion->estaAbierta()) {
+        return 'Esta votación no está abierta.';
+    }
+    $opcion = Opcion::where('votacion_id', $votacion->id)->find($datos['opcion_id']);
+    if (! $opcion) {
+        return 'La opción no pertenece a esta votación.';
+    }
+    if (Voto::where('user_id', $user->id)->where('votacion_id', $votacion->id)->count()
+            >= $votacion->votos_por_usuario) {
+        return 'Ya alcanzaste el máximo de votos permitidos en esta votación.';
+    }
+    if (Voto::where('user_id', $user->id)->where('opcion_id', $opcion->id)->exists()) {
+        return 'Ya votaste por esta opción.';
+    }
+
+    Voto::create(['user_id' => $user->id, 'votacion_id' => $votacion->id, 'opcion_id' => $opcion->id]);
+    return null;
+});</pre>
+</section>
+
+<!-- ===================== 6. PRUEBAS ===================== -->
+<section class="page-break">
+  <h2>6. Pruebas y resultados</h2>
+
+  <h3>6.1 Pruebas automáticas</h3>
+  <p>Se escribieron pruebas de funcionalidad (<i>Feature tests</i>) con PHPUnit que se ejecutan con <code>php artisan test</code> sobre una base de datos de prueba aislada. Resultado de la ejecución:</p>
+  <pre>Ediciones Publicas
+ ✔ Lista todas las ediciones y sus categorias
+
+Reporte Excel
+ ✔ Solo admin puede descargar
+ ✔ Excel filtra por categoria
+ ✔ Excel de todas las categorias sin detalle
+
+Votacion
+ ✔ Invitado no puede votar
+ ✔ Votante registra voto
+ ✔ No se puede exceder el limite de votos
+ ✔ No se vota en votacion cerrada o borrador
+ ✔ Opcion de otra votacion es rechazada
+ ✔ Votante no accede al admin
+ ✔ No se abre con menos de dos opciones
+ ✔ Paginas publicas cargan
+
+OK (12 tests, 39 assertions)</pre>
+
+  <h3 class="page-break" style="margin-top:0">6.2 Pruebas manuales</h3>
+  <table class="t">
+    <tr><th>Funcionalidad</th><th>Procedimiento</th><th>Resultado</th></tr>
+    <tr><td>Despliegue con Docker</td><td><code>docker compose up --build</code>; abrir http://localhost:8080</td><td class="ok">Aplicación, MySQL y phpMyAdmin activos</td></tr>
+    <tr><td>Migraciones y datos de prueba</td><td>Revisión de tablas y filas en phpMyAdmin</td><td class="ok">15 tablas creadas con datos de ejemplo</td></tr>
+    <tr><td>Registro e inicio de sesión</td><td>Crear cuenta e ingresar con ella</td><td class="ok">Acceso correcto; sesión iniciada</td></tr>
+    <tr><td>Credenciales incorrectas</td><td>Ingresar con contraseña inválida</td><td class="ok">Mensaje genérico; bloqueo tras 5 intentos</td></tr>
+    <tr><td>Votar</td><td>Elegir una opción, confirmar y emitir el voto</td><td class="ok">Voto guardado en la tabla <i>votos</i></td></tr>
+    <tr><td>Límite de votos</td><td>Intentar votar de nuevo en la misma votación</td><td class="ok">El sistema lo impide</td></tr>
+    <tr><td>Control de roles</td><td>Votante abre <code>/admin</code></td><td class="ok">Error 403</td></tr>
+    <tr><td>CRUD administrativo</td><td>Crear, editar y eliminar ediciones, categorías, votaciones y opciones</td><td class="ok">Cambios visibles de inmediato en el sitio público</td></tr>
+    <tr><td>Reporte Excel</td><td>Descargar por edición y por categoría</td><td class="ok">Archivo .xlsx con las 4 hojas esperadas</td></tr>
+  </table>
+</section>
+
+<!-- ===================== 7. REPOSITORIO ===================== -->
+<section class="avoid">
+  <h2>7. Repositorio</h2>
+  <p><b>Enlace al repositorio:</b> <span class="ph">[https://github.com/usuario/votaciones-festival]</span></p>
+  <p>El repositorio contiene el código fuente completo y un <code>README.md</code> con las instrucciones de instalación y ejecución:</p>
+  <pre># Con Docker (recomendado)
+docker compose up --build
+#   Sitio:       http://localhost:8080
+#   phpMyAdmin:  http://localhost:8081
+
+# Sin Docker (PHP 8.3 + Composer)
+composer install &amp;&amp; php artisan migrate --seed &amp;&amp; php artisan serve
+
+# Pruebas
+php artisan test</pre>
+  <p class="muted">Las cuentas de demostración (administrador y votante) están documentadas en el README y son solo datos de prueba. El archivo <code>.env</code> está excluido del repositorio mediante <code>.gitignore</code>.</p>
+</section>
+
+<!-- ===================== 8. VIDEO ===================== -->
+<section class="avoid">
+  <h2>8. Video</h2>
+  <p><b>Enlace al video de demostración:</b> <span class="ph">[https://...]</span></p>
+  <p>El video muestra: (1) el entorno levantado con Docker, (2) la base de datos en MySQL, (3) el registro e inicio de sesión, (4) el panel administrativo cargando ediciones, categorías, votaciones y opciones, (5) la interfaz pública mostrando esos datos, (6) el flujo completo de un voto y (7) la descarga del reporte en Excel, con la participación de los cuatro integrantes.</p>
+</section>
+
+<!-- ===================== 9. CONCLUSIONES ===================== -->
+<section>
+  <h2>9. Conclusiones y distribución del trabajo</h2>
+
+  <h3>9.1 Aprendizajes</h3>
+  <ul>
+    <li>Un modelo de datos jerárquico (Edición → Categoría → Votación → Opción) permite reutilizar el sistema en cada edición del Festival sin cambiar el código.</li>
+    <li>Las migraciones y los seeders hacen el entorno reproducible; Docker permite que cualquier integrante o el docente lo levante con un solo comando.</li>
+    <li>Las reglas críticas (un voto por opción, límite por usuario, votación abierta) deben validarse en el servidor y respaldarse con restricciones en la base de datos y transacciones.</li>
+    <li>Separar roles y proteger rutas con middleware mantiene la administración fuera del alcance del público.</li>
+  </ul>
+
+  <h3>9.2 Dificultades</h3>
+  <ul>
+    <li>Adaptar la ruta sugerida (Django) a Laravel, equivalencia acordada con el docente, manteniendo los mismos conceptos y entregables.</li>
+    <li>Configurar la conexión entre los contenedores de la aplicación y de MySQL, y esperar a que la base esté lista antes de migrar.</li>
+    <li>Evitar votos duplicados cuando varios usuarios votan al mismo tiempo (resuelto con transacciones y bloqueo).</li>
+  </ul>
+
+  <h3>9.3 Pendientes</h3>
+  <ul>
+    <li>Validar con el cliente el texto legal de tratamiento de datos, la categorización definitiva y las reglas marcadas como pendientes.</li>
+    <li>Recuperación de contraseña y verificación de correo electrónico.</li>
+    <li>Carga de imágenes para las opciones (el campo existe en la base de datos).</li>
+    <li>Despliegue en un servidor de producción con credenciales propias.</li>
+  </ul>
+
+  <div class="avoid">
+  <h3>9.4 Distribución del trabajo</h3>
+  <table class="t">
+    <tr><th>Integrante</th><th>Responsabilidades</th></tr>
+    <tr><td><span class="ph">[Integrante 1]</span></td><td><span class="ph">[Responsabilidades]</span></td></tr>
+    <tr><td><span class="ph">[Integrante 2]</span></td><td><span class="ph">[Responsabilidades]</span></td></tr>
+    <tr><td><span class="ph">[Integrante 3]</span></td><td><span class="ph">[Responsabilidades]</span></td></tr>
+    <tr><td><span class="ph">[Integrante 4]</span></td><td><span class="ph">[Responsabilidades]</span></td></tr>
+  </table>
+  </div>
+</section>
+
+</body>
+</html>
