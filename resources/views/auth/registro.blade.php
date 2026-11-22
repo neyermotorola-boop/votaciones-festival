@@ -54,4 +54,5 @@
 
 <div class="auth-divider"><span>¿Ya tienes cuenta?</span></div>
 <a href="{{ route('login') }}" class="btn btn-glass btn-lg w-100">Iniciar sesión</a>
+<script src="{{ asset('js/documento.js') }}?v={{ filemtime(public_path('js/documento.js')) }}" defer></script>
 @endsection

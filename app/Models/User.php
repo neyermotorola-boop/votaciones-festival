@@ -80,8 +80,11 @@ class User extends Authenticatable
         return [
             'tipo_documento' => [$requerido ? 'required' : 'nullable', \Illuminate\Validation\Rule::in(array_keys(static::TIPOS_DOCUMENTO))],
             'documento' => [
+                'bail',
                 $requerido ? 'required' : 'nullable',
                 'regex:/^[A-Z0-9]{5,15}$/',
+                // Estructura real según el tipo (CC, TI, CE, PA) y rechazo de números inventados.
+                new \App\Rules\DocumentoValido,
                 \Illuminate\Validation\Rule::unique('users', 'documento')->ignore($ignorarId),
             ],
         ];

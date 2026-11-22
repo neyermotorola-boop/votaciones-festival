@@ -23,4 +23,5 @@
         <button class="btn btn-brand w-100">Guardar documento</button>
     </form>
 </div>
+<script src="{{ asset('js/documento.js') }}?v={{ filemtime(public_path('js/documento.js')) }}" defer></script>
 @endsection

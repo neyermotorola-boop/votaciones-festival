@@ -63,4 +63,5 @@
         rol.addEventListener('change', mostrar); mostrar();
     })();
 </script>
+<script src="{{ asset('js/documento.js') }}?v={{ filemtime(public_path('js/documento.js')) }}" defer></script>
 @endsection

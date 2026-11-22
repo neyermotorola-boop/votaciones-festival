@@ -19,7 +19,7 @@ class DocumentoUnicoTest extends TestCase
     private function datos(array $extra = []): array
     {
         return array_merge([
-            'name' => 'Persona Uno', 'email' => 'uno@correo.test', 'tipo_documento' => 'CC', 'documento' => '1234567890',
+            'name' => 'Persona Uno', 'email' => 'uno@correo.test', 'tipo_documento' => 'CC', 'documento' => '1065432187',
             'password' => 'Clave12345', 'password_confirmation' => 'Clave12345', 'acepta_datos' => '1',
         ], $extra);
     }
@@ -44,8 +44,8 @@ class DocumentoUnicoTest extends TestCase
 
     public function test_el_documento_se_guarda_normalizado(): void
     {
-        $this->post('/registro', $this->datos(['documento' => '1.234.567-890']))->assertSessionHasNoErrors();
-        $this->assertDatabaseHas('users', ['email' => 'uno@correo.test', 'documento' => '1234567890', 'rol' => 'votante']);
+        $this->post('/registro', $this->datos(['documento' => '1.065.432-187']))->assertSessionHasNoErrors();
+        $this->assertDatabaseHas('users', ['email' => 'uno@correo.test', 'documento' => '1065432187', 'rol' => 'votante']);
     }
 
     public function test_no_se_puede_crear_otra_cuenta_con_el_mismo_documento(): void
@@ -54,7 +54,7 @@ class DocumentoUnicoTest extends TestCase
         auth()->logout();
 
         // Otro correo, mismo documento (incluso escrito distinto): se rechaza.
-        $this->post('/registro', $this->datos(['email' => 'otro@correo.test', 'documento' => '1 234 567 890']))
+        $this->post('/registro', $this->datos(['email' => 'otro@correo.test', 'documento' => '1 065 432 187']))
             ->assertSessionHasErrors('documento');
         $this->assertDatabaseCount('users', 1);
     }

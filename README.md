@@ -176,7 +176,7 @@ Los aportes individuales también se pueden comprobar con `git shortlog -sn` y `
 
 ## Pruebas automatizadas y de concurrencia
 ```bash
-php artisan test                       # 50 pruebas: CP-01 a CP-10, administración dinámica, reglas y reportes
+php artisan test                       # 92 pruebas: CP-01 a CP-10, administración, reglas, reportes, correos, fotos, Excel, tema y documentos
 ./vendor/bin/phpunit --testdox         # lista cada prueba por nombre
 ```
 **Se deben repetir después de cualquier modificación** (código, migraciones o reglas) y antes de cada entrega.
@@ -220,6 +220,19 @@ Pruebas: `tests/Feature/UsuariosPermisosTest.php`.
 
 ## Una persona = una cuenta = un voto por categoría (documento y correo)
 Para evitar que alguien vote varias veces creando cuentas nuevas:
+- **Documento con estructura real** (`app/Rules/DocumentoValido.php`), según el tipo:
+  | Tipo | Regla |
+  |---|---|
+  | CC · Cédula de ciudadanía | 5 a 10 dígitos, sin empezar por 0; las de 10 dígitos (expedidas desde 2003) empiezan por 1 |
+  | TI · Tarjeta de identidad | 10 u 11 dígitos (NUIP) |
+  | CE · Cédula de extranjería | 5 a 10 dígitos |
+  | PA · Pasaporte | 5 a 15 letras o números, con al menos un número |
+
+  Además se rechazan números inventados: el mismo dígito repetido (`11111111`) y secuencias (`123456789`, `987654321`).
+  El formulario muestra el formato esperado según el tipo y abre el teclado numérico en celulares.
+  **Alcance:** es una validación de plausibilidad. Confirmar que una cédula *existe y pertenece a esa persona* exige consultar
+  a la Registraduría, que no ofrece un servicio público gratuito; se haría con un proveedor autorizado (servicio pago con convenio),
+  conectándolo en `DocumentoValido::validate()`.
 - **Registro con documento:** tipo (CC, CE, TI, PA) y número. Se normaliza (sin espacios, puntos ni guiones) y es **único**:
   un documento no puede tener dos cuentas. El votante **no puede cambiarlo** después (solo un administrador puede corregirlo).
 - **Correo real único:** además del correo, se guarda `email_canonico` (único), que ignora mayúsculas, alias `+etiqueta` y puntos de
@@ -230,7 +243,7 @@ Para evitar que alguien vote varias veces creando cuentas nuevas:
 - **Trazabilidad:** *Admin → Votos* muestra el documento de cada voto y permite buscar por nombre, correo o documento; el reporte Excel
   incluye la columna «Documento». En las páginas públicas nunca se muestra quién votó por qué opción.
 - Implementación: migración `2026_11_20_000000_add_documento_to_users_and_votos.php`, `User::reglasDocumento()`, `User::canonizarEmail()`,
-  `PublicoController::yaVoto()`, `DocumentoController`. Pruebas: `tests/Feature/DocumentoUnicoTest.php` (50 pruebas en total).
+  `PublicoController::yaVoto()`, `DocumentoController`. Pruebas: `tests/Feature/DocumentoUnicoTest.php` y `tests/Feature/DocumentoValidoTest.php`.
 - Nota de privacidad: el documento es un dato personal; su tratamiento debe estar cubierto por la política de datos (el texto legal está
   *pendiente de validación* con el cliente).
 
