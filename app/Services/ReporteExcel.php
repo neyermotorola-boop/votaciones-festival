@@ -31,14 +31,14 @@ class ReporteExcel
 
     public function __construct()
     {
-        $this->titulo = new Style(fontSize: 16, fontBold: true, fontColor: '1F4E9C');
+        $this->titulo = new Style(fontSize: 16, fontBold: true, fontColor: 'D3121B');
         $this->cabecera = new Style(
             fontBold: true,
             fontColor: Color::WHITE,
-            backgroundColor: '1F4E9C',
+            backgroundColor: 'D3121B',
             cellAlignment: CellAlignment::LEFT,
         );
-        $this->etiqueta = new Style(fontBold: true, fontColor: '1F4E9C');
+        $this->etiqueta = new Style(fontBold: true, fontColor: 'D3121B');
         $this->porcentaje = new Style(format: '0.0%');
     }
 

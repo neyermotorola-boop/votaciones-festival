@@ -25,7 +25,7 @@ class NotificacionesTest extends TestCase
 
         $this->post('/registro', [
             'name' => 'Ana Pérez', 'email' => 'ana@test.co',
-            'password' => 'Secreta123', 'password_confirmation' => 'Secreta123', 'acepta_datos' => '1',
+            'password' => 'Secreta123', 'password_confirmation' => 'Secreta123', 'acepta_datos' => '1', 'tipo_documento' => 'CC', 'documento' => '102030401',
         ])->assertRedirect(route('home'));
 
         Notification::assertSentTo(User::where('email', 'ana@test.co')->first(), Bienvenida::class);
@@ -57,7 +57,7 @@ class NotificacionesTest extends TestCase
 
         $this->post('/registro', [
             'name' => 'Ana', 'email' => 'ana2@test.co',
-            'password' => 'Secreta123', 'password_confirmation' => 'Secreta123', 'acepta_datos' => '1',
+            'password' => 'Secreta123', 'password_confirmation' => 'Secreta123', 'acepta_datos' => '1', 'tipo_documento' => 'CC', 'documento' => '102030402',
         ]);
 
         Notification::assertNothingSent();
@@ -70,7 +70,7 @@ class NotificacionesTest extends TestCase
 
         $this->post('/registro', [
             'name' => 'Ana', 'email' => 'ana3@test.co',
-            'password' => 'Secreta123', 'password_confirmation' => 'Secreta123', 'acepta_datos' => '1',
+            'password' => 'Secreta123', 'password_confirmation' => 'Secreta123', 'acepta_datos' => '1', 'tipo_documento' => 'CC', 'documento' => '102030403',
         ])->assertRedirect(route('home'));
 
         $this->assertAuthenticated();

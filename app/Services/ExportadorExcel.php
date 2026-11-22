@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
  */
 class ExportadorExcel
 {
-    public const AZUL = '1F4E9C';
+    public const ROJO = 'D3121B';
 
     /**
      * @param  array<int, string>  $cabeceras
@@ -42,7 +42,7 @@ class ExportadorExcel
         $writer->addRow(Row::fromValuesWithStyle($cabeceras, new Style(
             fontBold: true,
             fontColor: Color::WHITE,
-            backgroundColor: self::AZUL,
+            backgroundColor: self::ROJO,
             cellAlignment: CellAlignment::LEFT,
         )));
 

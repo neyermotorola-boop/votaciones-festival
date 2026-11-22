@@ -55,7 +55,7 @@
 <script>
 (function () {
     const d = @json($datos);
-    const colores = ['#5b2a86', '#e0a526', '#2b7a78', '#c8453b', '#3a6ea5', '#8a8d91', '#a0537e', '#6b8e23'];
+    const colores = ['#D3121B', '#F2B705', '#2E7D32', '#1F4E9C', '#E8833A', '#8a8d91', '#6f1414', '#5C7A8A'];
     const base = { responsive: true, maintainAspectRatio: false };
     const el = id => document.getElementById(id);
 
@@ -73,7 +73,7 @@
     });
     new Chart(el('gDias'), {
         type: 'line',
-        data: { labels: d.dias.labels, datasets: [{ label: 'Votos', data: d.dias.data, borderColor: '#5b2a86', backgroundColor: 'rgba(91,42,134,.15)', fill: true, tension: .3 }] },
+        data: { labels: d.dias.labels, datasets: [{ label: 'Votos', data: d.dias.data, borderColor: '#D3121B', backgroundColor: 'rgba(211,18,27,.12)', fill: true, tension: .3 }] },
         options: { ...base, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } }
     });
 })();

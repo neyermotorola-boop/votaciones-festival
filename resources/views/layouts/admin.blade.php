@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{{ asset('favicon.png') }}" type="image/png">
     <title>@yield('titulo', 'Administración') · Votaciones</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,14 +15,14 @@
 </head>
 <body class="admin-body">
 <div class="admin-top">
-    <a class="brand" href="{{ route('admin.panel') }}"><span class="brand-mark"><i class="bi bi-music-note-beamed"></i></span>Administración</a>
+    <a class="brand" href="{{ route('admin.panel') }}"><img src="{{ asset('img/emblema-festival.png') }}" alt="" class="brand-emblem">Administración</a>
     <form method="post" action="{{ route('logout') }}">@csrf<button class="btn btn-sm btn-glass"><i class="bi bi-box-arrow-right"></i></button></form>
 </div>
 <div class="admin-shell">
     <aside class="sidebar">
         <a class="brand" href="{{ route('admin.panel') }}">
-            <span class="brand-mark"><i class="bi bi-music-note-beamed"></i></span>
-            <span>Votaciones<small>Panel de administración</small></span>
+            <img src="{{ asset('img/logo-festival.png') }}" alt="Fundación Festival de la Leyenda Vallenata" class="sidebar-logo">
+            <small>Votaciones · Panel de administración</small>
         </a>
         <div class="nav-label">General</div>
         <nav class="nav flex-column gap-1">

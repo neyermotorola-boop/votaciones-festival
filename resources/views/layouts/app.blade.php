@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{{ asset('favicon.png') }}" type="image/png">
     <title>@yield('titulo', 'Votaciones') · Festival de la Leyenda Vallenata</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,8 +17,9 @@
 <nav class="navbar navbar-expand-md navbar-dark navbar-fest sticky-top">
     <div class="container">
         <a class="navbar-brand" href="{{ route('home') }}">
-            <span class="brand-mark"><i class="bi bi-music-note-beamed"></i></span>
-            <span>Votaciones <small>Leyenda Vallenata</small></span>
+            <img src="{{ asset('img/logo-festival.png') }}" alt="Fundación Festival de la Leyenda Vallenata" class="brand-logo">
+            <span class="brand-sep" aria-hidden="true"></span>
+            <span class="brand-label">Votaciones</span>
         </a>
         <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav" aria-label="Menú"><span class="navbar-toggler-icon"></span></button>
         <div id="nav" class="collapse navbar-collapse">
@@ -52,7 +54,7 @@
 
 <footer class="footer-f">
     <div class="container d-flex flex-column flex-md-row justify-content-between gap-2" style="max-width:1040px">
-        <span><b>Fundación Festival de la Leyenda Vallenata</b> · Sistema de votaciones</span>
+        <span class="d-flex align-items-center gap-3"><img src="{{ asset('img/logo-festival.png') }}" alt="Fundación Festival de la Leyenda Vallenata" class="footer-logo"><span>Sistema de votaciones</span></span>
         <span>Proyecto académico · Desarrollo Web</span>
     </div>
 </footer>

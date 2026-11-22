@@ -24,7 +24,8 @@ class ExportarTablasTest extends TestCase
         $this->v = Votacion::create(['categoria_id' => $cat->id, 'titulo' => 'Canción del año', 'estado' => 'abierta']);
         $a = $this->v->opciones()->create(['nombre' => 'Canción A']);
         $this->v->opciones()->create(['nombre' => 'Canción B']);
-        $otra = Votacion::create(['categoria_id' => $cat->id, 'titulo' => 'Otra', 'estado' => 'abierta']);
+        $baile = Categoria::create(['edicion_id' => $ed->id, 'nombre' => 'Baile']);
+        $otra = Votacion::create(['categoria_id' => $baile->id, 'titulo' => 'Otra', 'estado' => 'abierta']);
         $x = $otra->opciones()->create(['nombre' => 'Opción X']);
 
         $ana = User::factory()->create(['name' => 'Ana Votante', 'rol' => 'votante']);
@@ -71,7 +72,7 @@ class ExportarTablasTest extends TestCase
     public function test_exportar_votos_respeta_filtros(): void
     {
         $admin = User::factory()->create(['rol' => 'admin']);
-        $filas = $this->filas($this->actingAs($admin)->get(route('admin.exportar.votos', ['votacion_id' => $this->v->id])));
+        $filas = $this->filas($this->actingAs($admin)->get(route('admin.exportar.votos', ['categoria_id' => $this->v->categoria_id])));
         $texto = json_encode($filas, JSON_UNESCAPED_UNICODE);
 
         $this->assertCount(2, $filas); // cabecera + 1 voto
@@ -85,14 +86,14 @@ class ExportarTablasTest extends TestCase
     public function test_seccion_votos_lista_y_filtra(): void
     {
         $admin = User::factory()->create(['rol' => 'admin']);
-        $this->actingAs($admin)->get(route('admin.votos.index'))->assertOk()->assertSee('Ana Votante')->assertSee('Luis Votante');
-        $this->actingAs($admin)->get(route('admin.votos.index', ['q' => 'ana votante']))->assertOk()->assertSee('Ana Votante')->assertDontSee('Luis Votante');
+        $this->actingAs($admin)->get(route('admin.votos'))->assertOk()->assertSee('Ana Votante')->assertSee('Luis Votante');
+        $this->actingAs($admin)->get(route('admin.votos', ['q' => 'ana votante']))->assertOk()->assertSee('Ana Votante')->assertDontSee('Luis Votante');
     }
 
     public function test_votante_no_puede_exportar(): void
     {
         $votante = User::factory()->create(['rol' => 'votante']);
         $this->actingAs($votante)->get(route('admin.exportar.votos'))->assertForbidden();
-        $this->actingAs($votante)->get(route('admin.votos.index'))->assertForbidden();
+        $this->actingAs($votante)->get(route('admin.votos'))->assertForbidden();
     }
 }

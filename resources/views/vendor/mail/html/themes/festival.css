@@ -29,7 +29,7 @@ blockquote {
 }
 
 a {
-    color: #1F4E9C;
+    color: #D3121B;
 }
 
 a img {
@@ -39,7 +39,7 @@ a img {
 /* Typography */
 
 h1 {
-    color: #1F4E9C;
+    color: #D3121B;
     font-size: 18px;
     font-weight: bold;
     margin-top: 0;
@@ -104,7 +104,7 @@ img {
 }
 
 .header a {
-    color: #1F4E9C;
+    color: #D3121B;
     font-size: 19px;
     font-weight: bold;
     text-decoration: none;
@@ -113,10 +113,10 @@ img {
 /* Logo */
 
 .logo {
-    height: 75px;
+    height: 64px;
     margin-top: 15px;
     margin-bottom: 10px;
-    max-height: 75px;
+    max-height: 64px;
     width: 75px;
 }
 
@@ -240,11 +240,11 @@ img {
 
 .button-blue,
 .button-primary {
-    background-color: #1F4E9C;
-    border-bottom: 8px solid #1F4E9C;
-    border-left: 18px solid #1F4E9C;
-    border-right: 18px solid #1F4E9C;
-    border-top: 8px solid #1F4E9C;
+    background-color: #D3121B;
+    border-bottom: 8px solid #D3121B;
+    border-left: 18px solid #D3121B;
+    border-right: 18px solid #D3121B;
+    border-top: 8px solid #D3121B;
 }
 
 .button-green,
@@ -258,17 +258,17 @@ img {
 
 .button-red,
 .button-error {
-    background-color: #C62828;
-    border-bottom: 8px solid #C62828;
-    border-left: 18px solid #C62828;
-    border-right: 18px solid #C62828;
-    border-top: 8px solid #C62828;
+    background-color: #8E1B1B;
+    border-bottom: 8px solid #8E1B1B;
+    border-left: 18px solid #8E1B1B;
+    border-right: 18px solid #8E1B1B;
+    border-top: 8px solid #8E1B1B;
 }
 
 /* Panels */
 
 .panel {
-    border-left: #1F4E9C solid 4px;
+    border-left: #D3121B solid 4px;
     margin: 21px 0;
 }
 

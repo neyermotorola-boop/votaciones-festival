@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{{ asset('favicon.png') }}" type="image/png">
     <title>@yield('titulo', 'Acceso') · Festival de la Leyenda Vallenata</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,14 +21,15 @@
     <div class="auth-glass">
         <figure class="auth-photo" style="background-image:url('{{ asset('img/vallenato.jpg') }}')">
             <figcaption>
-                <span class="auth-eyebrow">Festival de la Leyenda Vallenata</span>
+                <img src="{{ asset('img/logo-festival.png') }}" alt="Fundación Festival de la Leyenda Vallenata" class="auth-photo-logo">
+                <span class="auth-eyebrow">Sistema de votaciones</span>
                 <h2>Tu voz hace parte de la fiesta.</h2>
                 <p>Vota por tus favoritos: un voto por persona, resultados transparentes.</p>
             </figcaption>
         </figure>
 
         <main class="auth-form-side">
-            <a href="{{ route('home') }}" class="auth-logo-mobile"><span class="brand-mark"><i class="bi bi-music-note-beamed"></i></span> Votaciones <span>Leyenda Vallenata</span></a>
+            <a href="{{ route('home') }}" class="auth-logo-mobile"><img src="{{ asset('img/logo-festival.png') }}" alt="Fundación Festival de la Leyenda Vallenata"></a>
             @if(session('ok'))
                 <div class="alert alert-success py-2" role="alert"><i class="bi bi-check-circle-fill"></i><div>{{ session('ok') }}</div></div>
             @endif
