@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    @include('partials.tema-head')
     <link rel="icon" href="{{ asset('favicon.png') }}" type="image/png">
     <title>@yield('titulo', 'Votaciones') · Festival de la Leyenda Vallenata</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -42,6 +43,7 @@
                     <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Ingresar</a></li>
                     <li class="nav-item ms-md-1"><a class="btn btn-sm btn-gold" href="{{ route('registro') }}">Registrarme</a></li>
                 @endauth
+                <li class="nav-item ms-md-1 pb-2 pb-md-0">@include('partials.tema-toggle')</li>
             </ul>
         </div>
     </div>

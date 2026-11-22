@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    @include('partials.tema-head')
     <link rel="icon" href="{{ asset('favicon.png') }}" type="image/png">
     <title>@yield('titulo', 'Acceso') · Festival de la Leyenda Vallenata</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,6 +17,7 @@
 <body class="auth-body">
 <div class="auth-bg" style="background-image:url('{{ asset('img/vallenato.jpg') }}')"></div>
 <div class="auth-shade"></div>
+<div class="auth-theme">@include('partials.tema-toggle')</div>
 
 <div class="auth-stage">
     <div class="auth-glass">

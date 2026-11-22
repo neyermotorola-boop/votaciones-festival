@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    @include('partials.tema-head')
     <link rel="icon" href="{{ asset('favicon.png') }}" type="image/png">
     <title>@yield('titulo', 'Administración') · Votaciones</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,7 +17,10 @@
 <body class="admin-body">
 <div class="admin-top">
     <a class="brand" href="{{ route('admin.panel') }}"><img src="{{ asset('img/emblema-festival.png') }}" alt="" class="brand-emblem">Administración</a>
-    <form method="post" action="{{ route('logout') }}">@csrf<button class="btn btn-sm btn-glass"><i class="bi bi-box-arrow-right"></i></button></form>
+    <div class="d-flex align-items-center gap-2">
+        @include('partials.tema-toggle')
+        <form method="post" action="{{ route('logout') }}">@csrf<button class="btn btn-sm btn-glass" aria-label="Cerrar sesión"><i class="bi bi-box-arrow-right"></i></button></form>
+    </div>
 </div>
 <div class="admin-shell">
     <aside class="sidebar">
@@ -54,6 +58,7 @@
         </nav>
         @endif
         <div class="side-foot">
+            <div class="theme-toggle-row"><span data-tema-texto>Tema claro</span>@include('partials.tema-toggle')</div>
             <a class="nav-link" href="{{ route('home') }}"><i class="bi bi-box-arrow-up-right"></i>Ver sitio público</a>
             <form method="post" action="{{ route('logout') }}">@csrf
                 <button class="nav-link w-100 border-0 bg-transparent text-start"><i class="bi bi-box-arrow-right"></i>Cerrar sesión</button></form>

@@ -248,6 +248,12 @@ Para evitar que alguien vote varias veces creando cuentas nuevas:
 Definidos como variables en `public/css/app.css` (`--brand`, `--gold`, `--green`, `--red`, `--bg`), en el tema de correo
 `resources/views/vendor/mail/html/themes/festival.css` y en los encabezados de los Excel. El logo está en `public/img/logo-festival.png`.
 
+### Tema claro / oscuro
+Botón sol/luna en el encabezado del sitio, en el panel de administración (barra lateral) y en las pantallas de acceso.
+La elección se guarda en el navegador de cada usuario; si no ha elegido, se usa el modo del sistema operativo. El tema
+se aplica antes de pintar la página (sin destellos) y las gráficas se adaptan. Archivos: `public/js/tema.js`,
+`resources/views/partials/tema-head.blade.php` y el bloque `[data-theme="dark"]` de `public/css/app.css`.
+
 ### Notificaciones por correo
 Se envían en cola (servicio `queue` de Docker; sin Docker: `php artisan queue:work`). Si el servidor de correo falla,
 el registro o el voto **no** se afectan.

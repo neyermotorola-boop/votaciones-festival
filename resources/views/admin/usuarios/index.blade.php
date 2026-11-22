@@ -27,7 +27,7 @@
             <td class="small">
                 @if($u->esAdmin()) <span class="text-muted">Todos</span>
                 @elseif($u->esGestor())
-                    @forelse($u->permisos ?? [] as $p)<span class="badge text-bg-light border me-1">{{ \App\Models\User::PERMISOS[$p] ?? $p }}</span>@empty<span class="text-danger">Sin permisos</span>@endforelse
+                    @forelse($u->permisos ?? [] as $p)<span class="badge-perm me-1">{{ \App\Models\User::PERMISOS[$p] ?? $p }}</span>@empty<span class="text-danger">Sin permisos</span>@endforelse
                 @else <span class="text-muted">Solo vota</span> @endif
             </td>
             <td>{{ $u->votos_count }}</td>
