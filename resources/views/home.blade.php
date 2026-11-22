@@ -3,7 +3,7 @@
 @section('contenido')
 <section class="hero mb-4" style="background-image:url('{{ asset('img/vallenato.png') }}')">
     <div>
-        <span class="eyebrow mb-2">Edición {{ $edicion?->anio ?? '2027' }}</span>
+        <span class="eyebrow mb-2">Edición {{ $edicion?->anio ?? date('Y') }}</span>
         <h1>{{ $edicion?->nombre ?? 'Festival de la Leyenda Vallenata' }}</h1>
         <p class="lead mb-4">
             {{ $edicion?->descripcion ?: 'Participa en las votaciones del Festival. Tu voz también hace parte de la leyenda.' }}

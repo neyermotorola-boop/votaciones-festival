@@ -17,12 +17,10 @@
     <div class="mb-3"><label class="form-label" for="descripcion">Descripción</label>
         <textarea id="descripcion" name="descripcion" rows="3" class="form-control">{{ old('descripcion', $votacion->descripcion) }}</textarea></div>
     <div class="row g-3 mb-3">
-        <div class="col-md-4"><label class="form-label" for="apertura">Apertura</label>
+        <div class="col-md-6"><label class="form-label" for="apertura">Apertura</label>
             <input id="apertura" type="datetime-local" name="apertura" class="form-control" value="{{ old('apertura', $votacion->apertura?->format('Y-m-d\TH:i')) }}"></div>
-        <div class="col-md-4"><label class="form-label" for="cierre">Cierre</label>
+        <div class="col-md-6"><label class="form-label" for="cierre">Cierre</label>
             <input id="cierre" type="datetime-local" name="cierre" class="form-control" value="{{ old('cierre', $votacion->cierre?->format('Y-m-d\TH:i')) }}"></div>
-        <div class="col-md-4"><label class="form-label" for="vpu">Votos por usuario</label>
-            <input id="vpu" type="number" min="1" max="20" name="votos_por_usuario" class="form-control" value="{{ old('votos_por_usuario', $votacion->votos_por_usuario) }}" required></div>
     </div>
     <div class="form-check form-switch">
         <input class="form-check-input" type="checkbox" name="resultados_publicos" value="1" id="rp" @checked(old('resultados_publicos', $votacion->resultados_publicos))>

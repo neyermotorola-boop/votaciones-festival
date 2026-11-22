@@ -1,0 +1,50 @@
+
+  @page { size: A4; margin: 18mm 16mm 20mm 16mm; }
+  :root { --ink:#1a1230; --brand:#4b2a9b; --brand-d:#341b72; --gold:#f2a900; --muted:#5f5a78; --soft:#f4f1fb; }
+  * { box-sizing: border-box; }
+  body { font-family: 'Segoe UI', 'Inter', Arial, sans-serif; color: var(--ink); font-size: 10.5pt; line-height: 1.5; margin: 0; }
+  h1, h2, h3 { font-family: 'Segoe UI Semibold', 'Segoe UI', Arial, sans-serif; color: var(--brand-d); line-height: 1.25; }
+  h2 { font-size: 17pt; margin: 0 0 4mm; padding-bottom: 2mm; border-bottom: 3px solid var(--gold); }
+  h3 { font-size: 12pt; margin: 6mm 0 2mm; }
+  p { margin: 0 0 3mm; text-align: justify; }
+  .page-break { break-before: page; }
+  .avoid { break-inside: avoid; }
+  .muted { color: var(--muted); }
+  /* marcadores de datos pendientes */
+  .ph { background: #fff3b0; color: #6b4800; padding: 0 3px; border-radius: 3px; font-weight: 600; }
+
+  /* Portada */
+  .cover { height: 255mm; display: flex; flex-direction: column; justify-content: space-between; break-after: page; }
+  .cover-band { background: linear-gradient(135deg, #1a1230, #4b2a9b 65%, #8a1fa0); color: #fff; border-radius: 6mm; padding: 14mm 12mm; position: relative; overflow: hidden; }
+  .cover-band .photo { position:absolute; inset:0; background: url('capturas/portada.png') center 20% / cover; opacity: .28; }
+  .cover-band > * { position: relative; }
+  .cover small { letter-spacing: .16em; text-transform: uppercase; color: var(--gold); font-weight: 700; font-size: 9pt; }
+  .cover h1 { color: #fff; font-size: 27pt; margin: 4mm 0 3mm; }
+  .cover .sub { color: #e4def8; font-size: 12pt; }
+  .meta-table { width: 100%; border-collapse: collapse; margin-top: 8mm; }
+  .meta-table td { padding: 3mm 4mm; vertical-align: top; }
+  .meta-table tr:nth-child(odd) td { background: var(--soft); }
+  .meta-table td:first-child { width: 42mm; font-weight: 700; color: var(--brand-d); }
+
+  /* Tablas */
+  table.t { width: 100%; border-collapse: collapse; margin: 2mm 0 4mm; font-size: 9.5pt; }
+  table.t th { background: var(--brand-d); color: #fff; text-align: left; padding: 2mm 3mm; font-weight: 600; }
+  table.t td { padding: 2mm 3mm; vertical-align: top; }
+  table.t tr:nth-child(even) td { background: var(--soft); }
+  .ok { color: #11733a; font-weight: 700; }
+
+  /* Codigo */
+  pre { background: #15102a; color: #e9e4fb; border-radius: 3mm; padding: 4mm 5mm; font-family: Consolas, 'Cascadia Mono', monospace; font-size: 8.3pt; line-height: 1.45; white-space: pre-wrap; word-break: break-word; margin: 2mm 0 4mm; break-inside: avoid; }
+  pre .c { color: #9a90c0; }
+  .file { display: inline-block; background: var(--soft); color: var(--brand-d); border-radius: 2mm; padding: 0 3mm; font-family: Consolas, monospace; font-size: 8.5pt; font-weight: 700; margin-bottom: 1mm; }
+  code { font-family: Consolas, monospace; background: var(--soft); padding: 0 3px; border-radius: 2px; font-size: 9.2pt; }
+
+  /* Capturas */
+  figure { margin: 0 0 6mm; break-inside: avoid; }
+  figure img { width: 92%; margin: 0 auto; display: block; border-radius: 3mm; box-shadow: 0 0 0 1px #d9d3ee; }
+  figure.half img { width: 70%; margin: 0 auto; }
+  figcaption { background: var(--soft); border-left: 4px solid var(--gold); padding: 2.5mm 4mm; margin-top: 2mm; border-radius: 0 2mm 2mm 0; font-size: 9.5pt; }
+  figcaption b { color: var(--brand-d); }
+  .callout { background: #fff8e1; border-left: 4px solid var(--gold); padding: 3mm 4mm; border-radius: 0 2mm 2mm 0; margin: 3mm 0 4mm; font-size: 9.8pt; }
+  ul { margin: 0 0 3mm; padding-left: 6mm; } li { margin-bottom: 1mm; }
+  .toc li { margin-bottom: 1.5mm; }

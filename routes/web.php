@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DocumentoController;
 use App\Http\Controllers\PublicoController;
 use App\Http\Middleware\EsAdmin;
+use App\Http\Middleware\PermisoAdmin;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PublicoController::class, 'home'])->name('home');
@@ -17,24 +19,54 @@ Route::middleware('guest')->group(function () {
     Route::post('/registro', [AuthController::class, 'registro'])->middleware('throttle:10,1');
     Route::get('/ingresar', [AuthController::class, 'loginForm'])->name('login');
     Route::post('/ingresar', [AuthController::class, 'login'])->middleware('throttle:10,1');
+    Route::get('/recuperar', [AuthController::class, 'recuperarForm'])->name('recuperar');
+    Route::post('/recuperar', [AuthController::class, 'recuperar'])->middleware('throttle:5,1');
 });
 
 Route::middleware('auth')->group(function () {
     Route::post('/salir', [AuthController::class, 'logout'])->name('logout');
     Route::post('/votaciones/{votacion}/confirmar', [PublicoController::class, 'confirmar'])->name('votacion.confirmar');
     Route::post('/votaciones/{votacion}/votar', [PublicoController::class, 'votar'])->middleware('throttle:30,1')->name('votacion.votar');
+    Route::get('/mis-votos', [PublicoController::class, 'misVotos'])->name('mis-votos');
+    Route::get('/mi-documento', [DocumentoController::class, 'form'])->name('documento');
+    Route::post('/mi-documento', [DocumentoController::class, 'guardar'])->name('documento.guardar');
     Route::get('/votaciones/{votacion}/gracias', [PublicoController::class, 'gracias'])->name('votacion.gracias');
 });
 
-Route::middleware(['auth', EsAdmin::class])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/', [Admin\PanelController::class, 'index'])->name('panel');
-    Route::get('reportes', [Admin\ReporteController::class, 'index'])->name('reportes');
-    Route::get('reportes/excel', [Admin\ReporteController::class, 'exportar'])->name('reportes.excel');
-    Route::resource('ediciones', Admin\EdicionController::class)->parameters(['ediciones' => 'edicion'])->except('show');
-    Route::resource('categorias', Admin\CategoriaController::class)->except('show');
-    Route::resource('votaciones', Admin\VotacionController::class)->parameters(['votaciones' => 'votacion']);
-    Route::post('votaciones/{votacion}/estado', [Admin\VotacionController::class, 'estado'])->name('votaciones.estado');
-    Route::post('votaciones/{votacion}/publicar', [Admin\VotacionController::class, 'publicar'])->name('votaciones.publicar');
-    Route::post('votaciones/{votacion}/opciones', [Admin\VotacionController::class, 'opcionStore'])->name('opciones.store');
-    Route::delete('votaciones/{votacion}/opciones/{opcion}', [Admin\VotacionController::class, 'opcionDestroy'])->name('opciones.destroy');
+// Panel de administración: cada sección exige su permiso.
+// El administrador tiene todos; el gestor, solo los que el administrador le asignó.
+Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', [Admin\PanelController::class, 'index'])->middleware(PermisoAdmin::class.':panel')->name('panel');
+
+    Route::middleware(PermisoAdmin::class.':resultados')->group(function () {
+        Route::get('votos', [Admin\VotoController::class, 'index'])->name('votos');
+        Route::get('graficos', [Admin\GraficosController::class, 'index'])->name('graficos');
+    });
+
+    Route::middleware(PermisoAdmin::class.':reportes')->group(function () {
+        Route::get('reportes', [Admin\ReporteController::class, 'index'])->name('reportes');
+        Route::get('reportes/excel', [Admin\ReporteController::class, 'exportar'])->name('reportes.excel');
+    });
+
+    Route::middleware(PermisoAdmin::class.':ediciones')->group(function () {
+        Route::resource('ediciones', Admin\EdicionController::class)->parameters(['ediciones' => 'edicion'])->except('show');
+    });
+
+    Route::middleware(PermisoAdmin::class.':categorias')->group(function () {
+        Route::resource('categorias', Admin\CategoriaController::class)->except('show');
+    });
+
+    Route::middleware(PermisoAdmin::class.':votaciones')->group(function () {
+        Route::resource('votaciones', Admin\VotacionController::class)->parameters(['votaciones' => 'votacion']);
+        Route::post('votaciones/{votacion}/estado', [Admin\VotacionController::class, 'estado'])->name('votaciones.estado');
+        Route::post('votaciones/{votacion}/publicar', [Admin\VotacionController::class, 'publicar'])->name('votaciones.publicar');
+        Route::post('votaciones/{votacion}/opciones', [Admin\VotacionController::class, 'opcionStore'])->name('opciones.store');
+        Route::delete('votaciones/{votacion}/opciones/{opcion}', [Admin\VotacionController::class, 'opcionDestroy'])->name('opciones.destroy');
+    });
+
+    // Usuarios y permisos: solo el administrador.
+    Route::middleware(EsAdmin::class)->group(function () {
+        Route::resource('usuarios', Admin\UsuarioController::class)->parameters(['usuarios' => 'usuario'])->except(['show', 'destroy']);
+        Route::post('usuarios/{usuario}/estado', [Admin\UsuarioController::class, 'estado'])->name('usuarios.estado');
+    });
 });

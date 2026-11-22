@@ -50,7 +50,12 @@ class VotacionController extends Controller
 
     public function update(Request $request, Votacion $votacion)
     {
-        $votacion->update($this->validar($request));
+        $datos = $this->validar($request);
+        if ((int) $datos['categoria_id'] !== $votacion->categoria_id && $votacion->votos()->exists()) {
+            return back()->withInput()->with('error', 'No se puede cambiar de categoría una votación que ya tiene votos.');
+        }
+
+        $votacion->update($datos);
         Bitacora::registrar('Editar votación', $votacion->titulo);
 
         return redirect()->route('admin.votaciones.show', $votacion)->with('ok', 'Votación actualizada.');
@@ -124,7 +129,6 @@ class VotacionController extends Controller
             'descripcion' => ['nullable', 'string', 'max:2000'],
             'apertura' => ['nullable', 'date'],
             'cierre' => ['nullable', 'date', 'after:apertura'],
-            'votos_por_usuario' => ['required', 'integer', 'between:1,20'],
         ]);
         $datos['resultados_publicos'] = $request->boolean('resultados_publicos');
 

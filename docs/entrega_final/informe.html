@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Entrega final (Eje 4) - Sistema Web de Votaciones, Festival de la Leyenda Vallenata</title>
+<link rel="stylesheet" href="../entrega3/estilo.css">
+<style>
+  a { color: #4b2a9b; font-weight: 600; word-break: break-all; }
+  table.t td, table.t th { vertical-align: top; }
+  .small { font-size: 9pt; }
+  .file { display: block; width: fit-content; }
+  h2, h3, .file { break-after: avoid; }
+  table.t tr { break-inside: avoid; }
+  figure.sm img { width: 70%; }
+  figure.tall img { width: 80%; }
+  .estado-ok { color: #11733a; font-weight: 700; }
+  .nota { background: #eaf4f1; border-left: 4px solid #1f7a63; padding: 3mm 4mm; border-radius: 0 2mm 2mm 0; margin: 3mm 0 4mm; font-size: 9.6pt; }
+  .cover-band .photo { background: url('../entrega3/capturas/portada.png') center 20% / cover; }
+</style>
+</head>
+<body>
+
+<!-- ===================== 1. PORTADA ===================== -->
+<section class="cover">
+  <div class="cover-band">
+    <div class="photo"></div>
+    <small>Entrega final · Eje N.º 4 · Desarrollo Web · Festival Vallenato 2027</small>
+    <h1>Sistema Web de Votaciones<br>Festival de la Leyenda Vallenata</h1>
+    <div class="sub">Administración dinámica, usuarios con permisos, una persona = un voto y gráficos de resultados</div>
+  </div>
+
+  <table class="meta-table">
+    <tr><td>Institución</td><td>Fundación Universitaria del Área Andina</td></tr>
+    <tr><td>Asignatura</td><td>Desarrollo Web</td></tr>
+    <tr><td>Proyecto</td><td>Sistema Web de Votaciones – Festival de la Leyenda Vallenata 2027</td></tr>
+    <tr><td>Entrega</td><td>Entrega final (Eje N.º 4) · Correcciones, mejoras y demostración funcional</td></tr>
+    <tr><td>Equipo</td><td><span class="ph">[Número o nombre del equipo]</span></td></tr>
+    <tr><td>Integrantes</td><td>
+      1. <span class="ph">[Nombre completo del integrante 1]</span><br>
+      2. <span class="ph">[Nombre completo del integrante 2]</span><br>
+      3. <span class="ph">[Nombre completo del integrante 3]</span><br>
+      4. <span class="ph">[Nombre completo del integrante 4]</span>
+    </td></tr>
+    <tr><td>Fecha</td><td>19 de noviembre de 2026</td></tr>
+    <tr><td>Tecnologías</td><td>Laravel 13 (PHP 8.3) · MySQL 8.4 · Docker · Bootstrap 5 · Chart.js</td></tr>
+  </table>
+
+  <div class="muted" style="font-size:9pt">Continúa las Entregas N.º 2 y 3 (modelo de datos, autenticación, votación con regla de unicidad y API GET). Por acuerdo con el docente, el proyecto se mantiene desarrollado con Laravel y PHP; la equivalencia con los componentes de la guía se documenta en la sección 4.1.</div>
+</section>
+
+<!-- ===================== 2. FICHA DE ACCESO ===================== -->
+<section>
+  <h2>Ficha de acceso y evidencias</h2>
+  <p class="small muted">Los enlaces apuntan al repositorio del proyecto. Los datos de prueba son ficticios y la aplicación se ejecuta en <code>localhost</code> con Docker.</p>
+  <table class="t">
+    <tr><th style="width:38mm">Elemento</th><th>Información</th></tr>
+    <tr><td>Equipo e integrantes</td><td><span class="ph">[Equipo N.º / nombre]</span> — <span class="ph">[Integrante 1]</span>, <span class="ph">[Integrante 2]</span>, <span class="ph">[Integrante 3]</span>, <span class="ph">[Integrante 4]</span></td></tr>
+    <tr><td>Repositorio</td><td><a href="https://github.com/neyermotorola-boop/votaciones-festival">https://github.com/neyermotorola-boop/votaciones-festival</a><br>Rama principal: <code>main</code></td></tr>
+    <tr><td>README e instalación</td><td><a href="https://github.com/neyermotorola-boop/votaciones-festival/blob/main/README.md">README.md</a> (instalación con Docker y sin Docker, configuración de MySQL, ejecución, pruebas y aportes)</td></tr>
+    <tr><td>Administración dinámica</td><td><code>app/Http/Controllers/Admin/EdicionController.php</code> · <code>CategoriaController.php</code> · <code>VotacionController.php</code></td></tr>
+    <tr><td>Usuarios y permisos</td><td><code>app/Http/Controllers/Admin/UsuarioController.php</code> · <code>app/Http/Middleware/PermisoAdmin.php</code> · <code>app/Models/User.php</code></td></tr>
+    <tr><td>Una persona = un voto</td><td><code>app/Http/Controllers/PublicoController.php</code> (<code>votar</code>, <code>yaVoto</code>) · <code>DocumentoController.php</code> · migración <code>2026_11_20_000000_add_documento_to_users_and_votos.php</code></td></tr>
+    <tr><td>Gráficos</td><td><code>app/Http/Controllers/Admin/GraficosController.php</code> · <code>app/Services/EstadisticasVotos.php</code></td></tr>
+    <tr><td>Pruebas automáticas</td><td><code>tests/Feature/</code>: Entrega3Test, Entrega4Test, UsuariosPermisosTest, DocumentoUnicoTest (50 pruebas)</td></tr>
+    <tr><td>Concurrencia</td><td><code>docs/entrega_final/prueba_concurrencia.php</code> (PHP)</td></tr>
+    <tr><td>Video / sustentación</td><td>Duración máxima 8 minutos: presentación 1 · demostración 4 · preguntas 2 · cierre 1. Enlace: <span class="ph">[https://... enlace directo al video]</span></td></tr>
+  </table>
+</section>
+
+<!-- ===================== 3. CORRECCIONES ===================== -->
+<section class="page-break">
+  <h2>3. Atención a las correcciones y mejoras solicitadas</h2>
+  <p>La retroalimentación de la Entrega N.º 3 pidió siete acciones para la entrega final. A continuación se indica qué se hizo en cada una y dónde se puede verificar.</p>
+  <table class="t">
+    <tr><th style="width:44mm">Observación del docente</th><th>Qué se hizo</th><th style="width:38mm">Evidencia</th></tr>
+    <tr><td>Revisar la arquitectura tecnológica (guía: Django y Python; proyecto: Laravel y PHP)</td>
+        <td>Se mantiene Laravel y PHP, tecnología acordada con el docente. Se documenta la equivalencia de componentes (MVC ↔ MVT, Eloquent ↔ ORM, migraciones, <code>composer.json</code> ↔ <code>requirements.txt</code>, PHPUnit) y las ventajas y limitaciones de la elección.</td>
+        <td>Sección 4.1 · README «Decisión tecnológica»</td></tr>
+    <tr><td>Mantener y fortalecer las restricciones de un voto por usuario, categoría y edición</td>
+        <td>La regla ahora protege a la <b>persona</b>: documento único, correo real único y documento guardado en cada voto, además de la transacción con bloqueo y la restricción única de MySQL. El modelo <code>Voto</code> deriva edición y categoría de la votación.</td>
+        <td>Sección 4.4 · pruebas <code>DocumentoUnicoTest</code></td></tr>
+    <tr><td>Comprobar que nuevas ediciones se configuren desde la administración sin modificar el código</td>
+        <td>Flujo completo desde el panel: nueva edición (año sugerido), <b>copiar la estructura</b> de una edición anterior (categorías, votaciones y opciones en borrador), activar, abrir votación. Sin seeders ni cambios de código.</td>
+        <td>Sección 4.2 · <code>Entrega4Test</code></td></tr>
+    <tr><td>Fortalecer la documentación del repositorio (instalación, configuración y ejecución)</td>
+        <td>README ampliado: Docker y sin Docker, configuración de MySQL, migraciones y datos de prueba, cuentas de demostración, estructura de archivos, seguridad, pruebas y guion de demostración.</td>
+        <td>README.md</td></tr>
+    <tr><td>Documentar los aportes de cada integrante</td>
+        <td>Tabla de aportes en el README y en la sección 9 de este informe; comprobable con <code>git shortlog -sn</code>.</td>
+        <td>Sección 9 · README «Aportes del equipo»</td></tr>
+    <tr><td>Mantener las pruebas y repetir las de concurrencia tras cualquier modificación</td>
+        <td>50 pruebas automáticas (todas pasan) y prueba de concurrencia en PHP repetida sobre MySQL tras los cambios: 10 solicitudes simultáneas → 1 voto registrado y 9 rechazadas.</td>
+        <td>Sección 7</td></tr>
+    <tr><td>Preparar una demostración funcional (administración dinámica, votos, validaciones y resultados)</td>
+        <td>Guion de 8 minutos con las 7 funcionalidades, datos de prueba preparados y cuentas por rol. Se añadieron gráficos de votación para la consulta de resultados.</td>
+        <td>Secciones 5, 6 y 8</td></tr>
+  </table>
+  <div class="nota"><b>Mejoras adicionales (a petición del equipo):</b> creación de usuarios con permisos individuales (rol «gestor»), identificación de cada persona por documento y correo para impedir votos repetidos con cuentas nuevas, y panel de gráficos de votación.</div>
+</section>
+
+<!-- ===================== 4. IMPLEMENTACION ===================== -->
+<section class="page-break">
+  <h2>4. Implementación técnica</h2>
+
+  <h3>4.1 Arquitectura: Laravel y PHP frente a Django y Python</h3>
+  <p>La guía de la asignatura menciona Django y Python. El proyecto se mantiene en <b>Laravel (PHP)</b>, por acuerdo con el docente. Los conceptos son equivalentes y los requisitos funcionales y de datos (reglas de votación, restricciones en MySQL, API, pruebas) son independientes del lenguaje.</p>
+  <table class="t">
+    <tr><th>Django (MVT)</th><th>Laravel (MVC)</th><th>En este proyecto</th></tr>
+    <tr><td>Model / ORM</td><td>Modelos Eloquent</td><td><code>app/Models/</code> (Edicion, Categoria, Votacion, Opcion, Voto, User)</td></tr>
+    <tr><td>View (lógica)</td><td>Controlador</td><td><code>app/Http/Controllers/</code></td></tr>
+    <tr><td>Template</td><td>Vista Blade</td><td><code>resources/views/</code></td></tr>
+    <tr><td><code>urls.py</code></td><td>Rutas</td><td><code>routes/web.php</code>, <code>routes/api.php</code></td></tr>
+    <tr><td><code>makemigrations</code> / <code>migrate</code></td><td>Migraciones</td><td><code>database/migrations/</code> · <code>php artisan migrate</code></td></tr>
+    <tr><td><code>requirements.txt</code></td><td><code>composer.json</code> + <code>composer.lock</code></td><td>Dependencias y versiones fijas</td></tr>
+    <tr><td>Sitio de administración</td><td>Panel propio con permisos</td><td><code>/admin</code> (ediciones, categorías, votaciones, usuarios, gráficos)</td></tr>
+    <tr><td><code>manage.py test</code></td><td>PHPUnit</td><td><code>php artisan test</code></td></tr>
+  </table>
+  <p><b>Ventajas de la elección:</b> autenticación, validación, protección CSRF, migraciones, ORM y pruebas integrados; transacciones y bloqueo de filas para garantizar la regla de votación; MySQL 8 sin configuración extra; Docker para ejecutar todo con un comando. <b>Limitaciones reconocidas:</b> curva de aprendizaje de las convenciones y, para picos muy altos de votos, la necesidad de añadir caché y colas (la restricción de MySQL garantiza la regla en cualquier caso).</p>
+
+  <h3>4.2 Administración dinámica de ediciones, categorías, votaciones y opciones</h3>
+  <p>Una nueva edición se configura <b>solo desde el panel</b>, sin modificar código ni ejecutar seeders:</p>
+  <ul>
+    <li><b>Ediciones → Nueva edición:</b> nombre, año (propone el siguiente al último) y opción <i>«Copiar estructura de una edición anterior»</i>, que duplica categorías, votaciones y opciones dentro de una transacción. Las votaciones copiadas quedan en <b>borrador y sin votos</b>.</li>
+    <li>Solo una edición está activa a la vez; la API, el sitio público y el reporte Excel incluyen la nueva edición automáticamente.</li>
+    <li>Integridad: no se cambia la edición de una categoría que ya tiene votos y no se elimina lo que tiene votos; cada acción queda en la bitácora.</li>
+  </ul>
+  <p>Verificado con las pruebas «nueva edición se configura desde la administración y recibe votos» y «nueva edición puede copiar estructura de la anterior».</p>
+
+  <h3>4.3 Usuarios con permisos individuales</h3>
+  <p>El administrador crea usuarios y decide qué puede hacer cada uno (<b>Admin → Usuarios y permisos</b>). Hay tres roles: <b>administrador</b> (todo), <b>gestor</b> (solo lo asignado) y <b>votante</b> (solo vota).</p>
+  <table class="t">
+    <tr><th style="width:52mm">Permiso del gestor</th><th>Habilita</th></tr>
+    <tr><td><code>ediciones</code></td><td>Gestionar ediciones</td></tr>
+    <tr><td><code>categorias</code></td><td>Crear y editar categorías</td></tr>
+    <tr><td><code>votaciones</code></td><td>Gestionar votaciones y opciones</td></tr>
+    <tr><td><code>resultados</code></td><td>Ver votos y gráficos de resultados</td></tr>
+    <tr><td><code>reportes</code></td><td>Descargar reportes Excel</td></tr>
+  </table>
+  <p>Cada sección del panel se protege en el servidor con el middleware <code>PermisoAdmin</code>; el menú lateral solo muestra lo permitido y un acceso no autorizado devuelve <b>403</b>. Las cuentas se activan y desactivan sin borrarlas (conservan su historial) y el administrador no puede desactivarse ni quitarse el rol a sí mismo.</p>
+  <span class="file">app/Http/Middleware/PermisoAdmin.php</span>
+<pre>$ok = $permiso === 'panel' ? $user?-&gt;tieneAccesoPanel() : $user?-&gt;puede($permiso);
+abort_unless($ok, 403, 'No tienes permiso para acceder a esta sección.');</pre>
+  <figure>
+    <img src="capturas/e4_usuarios.png" alt="Listado de usuarios y permisos">
+    <figcaption><b>Figura 1. Usuarios y permisos.</b> Listado con rol, permisos asignados, documento, votos y estado. Se puede filtrar por rol y buscar por nombre, correo o documento.</figcaption>
+  </figure>
+  <figure class="sm">
+    <img src="capturas/e4_usuario_nuevo.png" alt="Formulario de nuevo usuario">
+    <figcaption><b>Figura 2. Nuevo usuario.</b> Al elegir el rol «Gestor» se muestran los permisos que el administrador puede marcar.</figcaption>
+  </figure>
+  <figure class="sm">
+    <img src="capturas/e4_gestor_panel.png" alt="Panel del gestor con menú limitado">
+    <figcaption><b>Figura 3. Panel de un gestor.</b> Con los permisos «categorías» y «resultados», solo ve esas secciones en el menú.</figcaption>
+  </figure>
+  <figure class="sm">
+    <img src="capturas/e4_gestor_403.png" alt="Error 403 del gestor en ediciones">
+    <figcaption><b>Figura 4. Restricción de acceso.</b> El mismo gestor intenta abrir <code>/admin/ediciones</code> sin permiso y recibe 403.</figcaption>
+  </figure>
+
+  <h3>4.4 Una persona = una cuenta = un voto por categoría</h3>
+  <p>Para impedir que alguien vote varias veces creando cuentas nuevas, el voto se liga a la persona mediante su <b>documento de identidad</b> y su <b>correo real</b>:</p>
+  <table class="t">
+    <tr><th style="width:8mm">N.º</th><th style="width:44mm">Control</th><th>Cómo funciona</th></tr>
+    <tr><td>1</td><td>Documento único</td><td>El registro exige tipo (CC, CE, TI, PA) y número. Se normaliza (sin espacios, puntos ni guiones) y <code>users.documento</code> es <b>único</b>: un documento no puede tener dos cuentas. El votante no puede cambiarlo después.</td></tr>
+    <tr><td>2</td><td>Correo real único</td><td><code>users.email_canonico</code> (único) ignora mayúsculas, alias <code>+etiqueta</code> y puntos de Gmail: <code>juan.perez+2@gmail.com</code> y <code>juanperez@gmail.com</code> son la misma persona.</td></tr>
+    <tr><td>3</td><td>Documento en el voto</td><td><code>votos.documento</code> con restricción <b>UNIQUE (edicion_id, categoria_id, documento)</b>: MySQL rechaza un segundo voto del mismo documento aunque se cambie de cuenta.</td></tr>
+    <tr><td>4</td><td>Validación y bloqueo</td><td>El servidor revisa por cuenta y por documento (<code>PublicoController::yaVoto</code>) dentro de una transacción con <code>lockForUpdate</code>; existe además la restricción <code>(user_id, edicion_id, categoria_id)</code>.</td></tr>
+    <tr><td>5</td><td>Cuentas anteriores</td><td>Las cuentas sin documento deben registrarlo (<code>/mi-documento</code>) antes de votar.</td></tr>
+  </table>
+  <span class="file">database/migrations/2026_11_20_000000_add_documento_to_users_and_votos.php</span>
+<pre>Schema::table('users', function (Blueprint $table) {
+    $table-&gt;string('tipo_documento', 4)-&gt;nullable()-&gt;after('email');
+    $table-&gt;string('documento', 15)-&gt;nullable()-&gt;unique()-&gt;after('tipo_documento');
+    $table-&gt;string('email_canonico', 190)-&gt;nullable()-&gt;unique()-&gt;after('email');
+});
+Schema::table('votos', function (Blueprint $table) {
+    $table-&gt;string('documento', 15)-&gt;nullable()-&gt;after('opcion_id');
+    $table-&gt;unique(['edicion_id', 'categoria_id', 'documento'], 'votos_unico_documento_edicion_categoria');
+});</pre>
+  <span class="file">app/Http/Controllers/PublicoController.php</span>
+<pre><span class="c">// ¿Esta persona ya votó en la categoría? Se comprueba por cuenta y también por documento.</span>
+public static function yaVoto(User $user, int $categoriaId): bool
+{
+    return Voto::where('categoria_id', $categoriaId)
+        -&gt;where(fn ($q) =&gt; $q-&gt;where('user_id', $user-&gt;id)
+            -&gt;orWhere(fn ($w) =&gt; $w-&gt;whereNotNull('documento')-&gt;where('documento', $user-&gt;documento)))
+        -&gt;exists();
+}</pre>
+  <p>Estado de las migraciones y de los índices en MySQL 8.4 (Docker):</p>
+<pre>2026_11_08_000000_add_edicion_categoria_to_votos_table ............. [2] Ran
+2026_11_19_000000_add_permisos_to_users_table ...................... [3] Ran
+2026_11_20_000000_add_documento_to_users_and_votos ................. [4] Ran
+
+votos  UNIQUE  votos_unico_usuario_edicion_categoria   (user_id, edicion_id, categoria_id)
+votos  UNIQUE  votos_unico_documento_edicion_categoria (edicion_id, categoria_id, documento)
+users  UNIQUE  users_documento_unique · users_email_canonico_unique · users_email_unique</pre>
+  <figure>
+    <img src="capturas/e4_registro_documento.png" alt="Registro con documento">
+    <figcaption><b>Figura 5. Registro con documento.</b> El formulario pide tipo y número de documento e informa que solo se permite una cuenta por persona.</figcaption>
+  </figure>
+  <figure>
+    <img src="capturas/e4_registro_duplicado.png" alt="Registro rechazado por documento repetido">
+    <figcaption><b>Figura 6. Documento repetido.</b> Un segundo registro con el mismo documento (escrito <code>1.000.000.002</code>) con otro correo es rechazado.</figcaption>
+  </figure>
+  <figure>
+    <img src="capturas/e4_registro_alias.png" alt="Registro rechazado por correo con alias">
+    <figcaption><b>Figura 7. Correo con alias.</b> <code>admin+dos@festival.test</code> se reconoce como el mismo correo que <code>admin@festival.test</code> y se rechaza.</figcaption>
+  </figure>
+  <figure>
+    <img src="capturas/e4_votos_documento.png" alt="Consulta administrativa de votos con documento">
+    <figcaption><b>Figura 8. Trazabilidad.</b> En <i>Admin → Votos</i> cada voto nuevo muestra el documento de quien votó (los votos anteriores al cambio aparecen como «Sin documento»). Se puede buscar por nombre, correo o documento y el reporte Excel incluye la columna «Documento».</figcaption>
+  </figure>
+  <div class="nota"><b>Alcance y privacidad.</b> El documento garantiza una cuenta por documento, pero no verifica que sea de la persona (para eso se requeriría validar el correo o una fuente oficial). Es un dato personal: las páginas públicas nunca muestran quién votó por qué opción y el texto legal de tratamiento de datos sigue <i>pendiente de validación</i> con el cliente.</div>
+
+  <h3>4.5 Gráficos de votación</h3>
+  <p>En <b>Admin → Gráficos</b> (permiso «resultados») se visualizan datos reales leídos de MySQL, filtrables por edición y votación: <b>votos por opción</b> (barras con porcentaje), <b>votos por categoría</b> (dona), <b>votos por día</b> (línea, últimos 14 días) y totales con el porcentaje de participación. El panel principal muestra además votos por día y por categoría. Los gráficos se dibujan con Chart.js a partir de consultas agregadas (<code>app/Services/EstadisticasVotos.php</code>).</p>
+  <figure class="tall">
+    <img src="capturas/e4_graficos.png" alt="Gráficos de votación">
+    <figcaption><b>Figura 9. Gráficos de votación.</b> Totales (7 votos, 5 personas, 71,4 % de participación), votos por opción, por categoría y por día.</figcaption>
+  </figure>
+  <figure>
+    <img src="capturas/e4_panel_graficos.png" alt="Panel principal con gráficos">
+    <figcaption><b>Figura 10. Panel principal.</b> Resumen general con los gráficos de votos por día y por categoría; solo se muestran a quien tiene el permiso «resultados».</figcaption>
+  </figure>
+</section>
+
+<!-- ===================== 5. FUNCIONALIDADES ===================== -->
+<section class="page-break">
+  <h2>5. Funcionalidades que se demuestran</h2>
+  <table class="t">
+    <tr><th style="width:8mm">N.º</th><th style="width:36mm">Funcionalidad</th><th>Cómo se demuestra</th><th style="width:30mm">Dónde</th></tr>
+    <tr><td>1</td><td>Administración dinámica</td><td>Crear edición (copiando estructura), categoría, votación y opciones desde el panel; aparece en el sitio público sin tocar código.</td><td>4.2</td></tr>
+    <tr><td>2</td><td>Usuarios</td><td>Registro con documento, inicio y cierre de sesión; permisos diferenciados: administrador, gestor (permisos individuales) y votante; 403 sin permiso.</td><td>4.3 · 4.4</td></tr>
+    <tr><td>3</td><td>Votación</td><td>Elegir una votación abierta, seleccionar opción, confirmar y ver «Voto registrado».</td><td>Entrega 3 · 4.4</td></tr>
+    <tr><td>4</td><td>Control de duplicados</td><td>Segundo voto en la categoría rechazado; documento y correo únicos; restricciones únicas en MySQL; prueba de concurrencia.</td><td>4.4 · 7</td></tr>
+    <tr><td>5</td><td>Resultados</td><td>«Mis votos», consulta administrativa con documento, gráficos, reporte Excel y API GET, todo desde MySQL.</td><td>4.4 · 4.5</td></tr>
+    <tr><td>6</td><td>Base de datos</td><td>MySQL 8.4 en Docker; estructura creada con migraciones; persistencia en el volumen <code>dbdata</code>; consultas en phpMyAdmin.</td><td>6</td></tr>
+    <tr><td>7</td><td>Validaciones</td><td>Formularios con mensajes, rutas protegidas por rol y permiso, CSRF (419), límite de intentos (429) y manejo de situaciones incorrectas.</td><td>4.3 · 4.4 · 7</td></tr>
+  </table>
+  <h3>Situaciones incorrectas que el sistema controla</h3>
+  <table class="t">
+    <tr><th>Situación</th><th>Respuesta del sistema</th></tr>
+    <tr><td>Registro con documento o correo ya usado (incluido alias de correo)</td><td>Error junto al campo; no se crea la cuenta</td></tr>
+    <tr><td>Registro sin tipo o número de documento, o con formato inválido</td><td>Error de validación</td></tr>
+    <tr><td>Votar sin documento registrado</td><td>Redirige a <code>/mi-documento</code></td></tr>
+    <tr><td>Segundo voto en la misma categoría y edición</td><td>«Ya votaste en esta categoría…»</td></tr>
+    <tr><td>Gestor abre una sección sin permiso / votante abre el panel</td><td>403</td></tr>
+    <tr><td>Usuario desactivado inicia sesión</td><td>Se rechaza el ingreso</td></tr>
+    <tr><td>Votación cerrada o en borrador, categoría deshabilitada u opción ajena</td><td>Se rechaza el voto</td></tr>
+    <tr><td>Formulario sin token CSRF / demasiados intentos</td><td>419 / 429</td></tr>
+  </table>
+</section>
+
+<!-- ===================== 6. DOCKER Y MYSQL ===================== -->
+<section>
+  <h2>6. Docker y MySQL</h2>
+  <p>El sistema completo se ejecuta con <code>docker compose up --build</code>. El contenedor de la aplicación espera a MySQL, ejecuta las migraciones y carga los datos de prueba.</p>
+  <table class="t">
+    <tr><th>Servicio</th><th>Imagen</th><th>Puerto</th><th>Función</th></tr>
+    <tr><td><code>votaciones_app</code></td><td>PHP 8.3 + Apache</td><td>8080</td><td>Aplicación Laravel</td></tr>
+    <tr><td><code>votaciones_db</code></td><td>mysql:8.4</td><td>3307 → 3306</td><td>Base de datos (volumen <code>dbdata</code>)</td></tr>
+    <tr><td><code>votaciones_pma</code></td><td>phpmyadmin:5</td><td>8081</td><td>Consulta de tablas y datos</td></tr>
+  </table>
+  <p>Consultas de verificación ejecutadas en MySQL:</p>
+<pre><span class="c">-- Debe devolver 0 filas: ningún usuario con dos votos en la misma categoría y edición</span>
+SELECT user_id, edicion_id, categoria_id, COUNT(*) FROM votos
+GROUP BY user_id, edicion_id, categoria_id HAVING COUNT(*) &gt; 1;
+<span class="c">→ filas_duplicadas = 0</span>
+
+<span class="c">-- Gestor con permisos individuales guardados en JSON</span>
+SELECT email, rol, permisos, activo FROM users WHERE rol = 'gestor';
+<span class="c">→ gestor@festival.test | gestor | ["categorias", "resultados"] | 1</span></pre>
+</section>
+
+<!-- ===================== 7. PRUEBAS ===================== -->
+<section class="page-break">
+  <h2>7. Pruebas</h2>
+  <p>Las pruebas se ejecutan con <code>php artisan test</code> y se repiten después de cualquier modificación. Resultado final: <span class="estado-ok">50 pruebas, 203 aserciones, todas aprobadas</span>.</p>
+  <table class="t">
+    <tr><th style="width:42mm">Archivo</th><th style="width:16mm">Pruebas</th><th>Qué verifica</th></tr>
+    <tr><td><code>Entrega3Test.php</code></td><td>10</td><td>CP-01 a CP-10: voto válido, duplicado rechazado, otra categoría permitida, sin sesión, categoría no habilitada, opción ajena, historial, consulta administrativa, restricción en la base y API.</td></tr>
+    <tr><td><code>Entrega4Test.php</code></td><td>7</td><td>Nueva edición desde el panel, regla por edición, copiar estructura, permisos de administrador e integridad del modelo <code>Voto</code>.</td></tr>
+    <tr><td><code>UsuariosPermisosTest.php</code></td><td>11</td><td>Creación de gestor, acceso por permiso (403), desactivación de cuentas, validaciones y conteos reales de los gráficos.</td></tr>
+    <tr><td><code>DocumentoUnicoTest.php</code></td><td>10</td><td>Documento obligatorio y normalizado, documento y correo únicos (con alias), documento guardado en el voto, restricción de MySQL, documento inmodificable y búsqueda por documento.</td></tr>
+    <tr><td>Otras</td><td>12</td><td>Reglas generales de votación, reporte Excel y ediciones públicas.</td></tr>
+  </table>
+<pre>Documento Unico
+ ✔ El registro exige tipo y numero de documento
+ ✔ El documento se guarda normalizado
+ ✔ No se puede crear otra cuenta con el mismo documento
+ ✔ No se puede crear otra cuenta con el mismo correo aunque use alias
+ ✔ El voto guarda el documento de quien voto
+ ✔ Mysql rechaza dos votos del mismo documento en la misma categoria
+ ✔ Quien ya voto no vota de nuevo aunque cambie su documento de cuenta
+ ✔ Cuenta sin documento debe registrarlo antes de votar
+ ✔ El votante no puede cambiar su documento una vez registrado
+ ✔ El admin puede buscar votos por documento
+...
+OK (50 tests, 203 assertions)</pre>
+  <h3>Prueba de concurrencia (repetida tras los cambios)</h3>
+  <p>Script en PHP (<code>docs/entrega_final/prueba_concurrencia.php</code>): registra un usuario con documento y envía <b>10 solicitudes simultáneas</b> de voto a la misma categoría, contra la aplicación en Docker con MySQL 8.4.</p>
+<pre>$ php docs/entrega_final/prueba_concurrencia.php 4 conc32541@festival.test 10
+Solicitudes simultáneas enviadas: 10
+  VOTO REGISTRADO: 1
+  RECHAZADO (ya votaste en la categoría): 9
+OK: la regla un voto por categoría se cumplió.
+
+SELECT u.email, v.documento, COUNT(*) votos FROM votos v JOIN users u ON u.id = v.user_id ...
+→ conc32541@festival.test | 980614452 | 1</pre>
+  <p class="small muted">Las cuentas y votos de esta prueba se eliminaron después para dejar intactos los datos de demostración.</p>
+</section>
+
+<!-- ===================== 8. DEMOSTRACION ===================== -->
+<section>
+  <h2>8. Plan de la demostración (8 minutos)</h2>
+  <table class="t">
+    <tr><th style="width:34mm">Momento</th><th style="width:16mm">Tiempo</th><th>Actividad</th></tr>
+    <tr><td>Presentación</td><td>1 min</td><td>Identificación del equipo y explicación breve del sistema (Laravel, MySQL 8 y Docker; regla: una persona, un voto).</td></tr>
+    <tr><td>Demostración funcional</td><td>4 min</td><td>(1) Admin crea edición copiando estructura y abre una votación · (2) registro con documento, sesión y permisos (gestor, 403) · (3) voto con confirmación · (4) segundo voto rechazado, documento repetido y consulta SQL sin duplicados · (5) Mis votos, Admin → Votos, gráficos y API · (6) MySQL y Docker · (7) validaciones y <code>php artisan test</code> (50 de 50).</td></tr>
+    <tr><td>Preguntas del docente</td><td>2 min</td><td>Respuesta a una o varias preguntas elegidas por el docente.</td></tr>
+    <tr><td>Cierre</td><td>1 min</td><td>Estado final del proyecto y mejoras pendientes (sección 9).</td></tr>
+  </table>
+  <div class="callout"><b>Cuentas de prueba (ficticias).</b> Administrador: <code>admin@festival.test</code> / <code>Admin12345</code> · Gestor (categorías y resultados): <code>gestor@festival.test</code> / <code>Gestor12345</code> · Votante: <code>votante@festival.test</code> / <code>Votante12345</code>. Sitio: <code>http://localhost:8080</code> · phpMyAdmin: <code>http://localhost:8081</code>.</div>
+</section>
+
+<!-- ===================== 9. CONCLUSIONES ===================== -->
+<section>
+  <h2>9. Conclusiones, mejoras pendientes y equipo</h2>
+  <h3>Estado final</h3>
+  <p>El sistema permite configurar ediciones, categorías, votaciones y opciones desde el panel; administra usuarios con permisos individuales; registra votos con confirmación; garantiza <b>una persona, una cuenta y un voto por categoría y edición</b> con controles en el código y en MySQL; y consulta resultados reales mediante tablas, gráficos, reporte Excel y API GET. Todo se ejecuta con Docker y está cubierto por 50 pruebas automáticas.</p>
+  <h3>Mejoras pendientes</h3>
+  <ul>
+    <li>Verificación del correo electrónico y recuperación de contraseña (hoy el registro no exige confirmar el correo).</li>
+    <li>Verificación del documento contra una fuente oficial o un proceso de validación presencial.</li>
+    <li>Validar con el cliente las categorías, opciones y reglas que hoy son de ejemplo, y el texto legal de tratamiento de datos.</li>
+    <li>Pruebas de carga, caché y colas para picos altos de votación, y despliegue en un servidor con HTTPS.</li>
+    <li>Cerrar de inmediato la sesión de un usuario desactivado que ya había iniciado sesión.</li>
+  </ul>
+  <h3>Aportes del equipo</h3>
+  <table class="t">
+    <tr><th style="width:48mm">Integrante</th><th style="width:38mm">Rol</th><th>Aportes principales</th></tr>
+    <tr><td><span class="ph">[Nombre del integrante 1]</span></td><td><span class="ph">[Rol]</span></td><td><span class="ph">[Módulos, pantallas, pruebas o documentación]</span></td></tr>
+    <tr><td><span class="ph">[Nombre del integrante 2]</span></td><td><span class="ph">[Rol]</span></td><td><span class="ph">[Aportes]</span></td></tr>
+    <tr><td><span class="ph">[Nombre del integrante 3]</span></td><td><span class="ph">[Rol]</span></td><td><span class="ph">[Aportes]</span></td></tr>
+    <tr><td><span class="ph">[Nombre del integrante 4]</span></td><td><span class="ph">[Rol]</span></td><td><span class="ph">[Aportes]</span></td></tr>
+  </table>
+  <p class="small muted">Los aportes individuales pueden verificarse en el historial del repositorio (<code>git shortlog -sn</code>).</p>
+</section>
+
+</body>
+</html>

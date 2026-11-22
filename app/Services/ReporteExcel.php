@@ -143,9 +143,9 @@ class ReporteExcel
         $hoja->setColumnWidth(36, 2);
         $hoja->setColumnWidth(14, 3);
         $hoja->setColumnWidth(18, 4, 5);
-        $hoja->setColumnWidth(16, 6, 7, 8, 9);
+        $hoja->setColumnWidth(16, 6, 7, 8);
 
-        $w->addRow(Row::fromValuesWithStyle(['Categoría', 'Votación', 'Estado', 'Apertura', 'Cierre', 'Votos por usuario', 'Resultados públicos', 'Opciones', 'Votos'], $this->cabecera));
+        $w->addRow(Row::fromValuesWithStyle(['Categoría', 'Votación', 'Estado', 'Apertura', 'Cierre', 'Resultados públicos', 'Opciones', 'Votos'], $this->cabecera));
 
         foreach ($votaciones as $v) {
             $w->addRow(Row::fromValues([
@@ -154,7 +154,6 @@ class ReporteExcel
                 ucfirst($v->estadoEfectivo()),
                 $v->apertura?->format('d/m/Y H:i') ?? '-',
                 $v->cierre?->format('d/m/Y H:i') ?? '-',
-                $v->votos_por_usuario,
                 $v->resultados_publicos ? 'Sí' : 'No',
                 $v->opciones->count(),
                 $v->votos_count,
@@ -173,8 +172,9 @@ class ReporteExcel
         $hoja->setColumnWidth(24, 4);
         $hoja->setColumnWidth(36, 5);
         $hoja->setColumnWidth(34, 6);
+        $hoja->setColumnWidth(18, 7);
 
-        $w->addRow(Row::fromValuesWithStyle(['Fecha y hora', 'Votante', 'Correo', 'Categoría', 'Votación', 'Opción elegida'], $this->cabecera));
+        $w->addRow(Row::fromValuesWithStyle(['Fecha y hora', 'Votante', 'Correo', 'Categoría', 'Votación', 'Opción elegida', 'Documento'], $this->cabecera));
 
         $porVotacion = $votaciones->keyBy('id');
         Voto::query()
@@ -191,6 +191,7 @@ class ReporteExcel
                         $v->categoria->nombre,
                         $v->titulo,
                         $voto->opcion?->nombre,
+                        $voto->documento,
                     ]));
                 }
             });

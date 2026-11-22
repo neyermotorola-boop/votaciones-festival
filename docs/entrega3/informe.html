@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Entrega N.º 3 - Sistema Web de Votaciones, Festival de la Leyenda Vallenata</title>
+<link rel="stylesheet" href="estilo.css">
+<style>
+  a { color: #4b2a9b; font-weight: 600; word-break: break-all; }
+  table.t td, table.t th { vertical-align: top; }
+  .small { font-size: 9pt; }
+  .file { display: block; width: fit-content; }
+  h2, h3, .file { break-after: avoid; }
+  table.t tr { break-inside: avoid; }
+  figure.sm img { width: 70%; }
+  figure.tall img { width: 80%; }
+  .estado-ok { color: #11733a; font-weight: 700; }
+  .nota { background: #eaf4f1; border-left: 4px solid #1f7a63; padding: 3mm 4mm; border-radius: 0 2mm 2mm 0; margin: 3mm 0 4mm; font-size: 9.6pt; }
+</style>
+</head>
+<body>
+
+<!-- ===================== 1. PORTADA ===================== -->
+<section class="cover">
+  <div class="cover-band">
+    <div class="photo"></div>
+    <small>Entrega N.º 3 · Desarrollo Web · Festival Vallenato 2027</small>
+    <h1>Sistema Web de Votaciones<br>Festival de la Leyenda Vallenata</h1>
+    <div class="sub">Módulo de votaciones con regla de unicidad, historial, consulta administrativa y API GET</div>
+  </div>
+
+  <table class="meta-table">
+    <tr><td>Institución</td><td>Fundación Universitaria del Área Andina</td></tr>
+    <tr><td>Asignatura</td><td>Desarrollo Web</td></tr>
+    <tr><td>Proyecto</td><td>Sistema Web de Votaciones – Festival de la Leyenda Vallenata 2027</td></tr>
+    <tr><td>Entrega</td><td>N.º 3 · Módulo real de votaciones y API GET</td></tr>
+    <tr><td>Equipo</td><td><span class="ph">[Número o nombre del equipo]</span></td></tr>
+    <tr><td>Integrantes</td><td>
+      1. <span class="ph">[Nombre completo del integrante 1]</span><br>
+      2. <span class="ph">[Nombre completo del integrante 2]</span><br>
+      3. <span class="ph">[Nombre completo del integrante 3]</span><br>
+      4. <span class="ph">[Nombre completo del integrante 4]</span>
+    </td></tr>
+    <tr><td>Fecha</td><td>8 de noviembre de 2026 (fecha máxima de entrega: 9 de noviembre de 2026)</td></tr>
+    <tr><td>Tecnologías</td><td>Laravel 13 (PHP 8.3) · MySQL 8.4 · Docker · Bootstrap 5</td></tr>
+  </table>
+
+  <div class="muted" style="font-size:9pt">El proyecto continúa el trabajo de la Entrega N.º 2 (edición, categoría, votación y opción). Por acuerdo con el docente se desarrolla con Laravel en lugar de Django; todos los conceptos solicitados (modelos, migraciones, vistas, rutas, formularios con CSRF, validaciones del servidor, persistencia en MySQL y API GET en JSON) se implementaron con las herramientas equivalentes de Laravel.</div>
+</section>
+
+<!-- ===================== 2. FICHA DE ACCESO ===================== -->
+<section>
+  <h2>Ficha de acceso y evidencias</h2>
+  <p class="small muted">Todos los enlaces son hipervínculos reales, de solo lectura, y se verificaron desde una ventana privada. El repositorio es público.</p>
+  <table class="t">
+    <tr><th style="width:34mm">Elemento</th><th>Información</th></tr>
+    <tr><td>Equipo e integrantes</td><td><span class="ph">[Equipo N.º / nombre]</span> — <span class="ph">[Integrante 1]</span>, <span class="ph">[Integrante 2]</span>, <span class="ph">[Integrante 3]</span>, <span class="ph">[Integrante 4]</span></td></tr>
+    <tr><td>Repositorio</td><td><a href="https://github.com/neyermotorola-boop/votaciones-festival">https://github.com/neyermotorola-boop/votaciones-festival</a><br>Rama principal: <code>main</code></td></tr>
+    <tr><td>README e instalación</td><td><a href="https://github.com/neyermotorola-boop/votaciones-festival/blob/main/README.md">https://github.com/neyermotorola-boop/votaciones-festival/blob/main/README.md</a></td></tr>
+    <tr><td>API GET</td><td>Ruta: <code>GET /api/categorias/</code><br>
+      Código: <a href="https://github.com/neyermotorola-boop/votaciones-festival/blob/main/routes/api.php">routes/api.php</a> y
+      <a href="https://github.com/neyermotorola-boop/votaciones-festival/blob/main/app/Http/Controllers/Api/CategoriaApiController.php">app/Http/Controllers/Api/CategoriaApiController.php</a><br>
+      Minuto del video: <span class="ph">[mm:ss]</span></td></tr>
+    <tr><td>Control de duplicados</td><td>
+      <a href="https://github.com/neyermotorola-boop/votaciones-festival/blob/main/app/Http/Controllers/PublicoController.php">app/Http/Controllers/PublicoController.php</a> (método <code>votar</code>) ·
+      <a href="https://github.com/neyermotorola-boop/votaciones-festival/blob/main/database/migrations/2026_11_08_000000_add_edicion_categoria_to_votos_table.php">migración con la restricción única</a> ·
+      <a href="https://github.com/neyermotorola-boop/votaciones-festival/blob/main/app/Models/Voto.php">app/Models/Voto.php</a><br>
+      Minuto del video: <span class="ph">[mm:ss]</span></td></tr>
+    <tr><td>Pruebas CP-01 a CP-10</td><td><a href="https://github.com/neyermotorola-boop/votaciones-festival/blob/main/tests/Feature/Entrega3Test.php">tests/Feature/Entrega3Test.php</a></td></tr>
+    <tr><td>Video</td><td>URL: <span class="ph">[https://... enlace directo al video]</span> · Duración total: <span class="ph">[mm:ss, máximo 8:00]</span></td></tr>
+    <tr><td>Enlace adicional</td><td>No hay aplicación desplegada públicamente. La aplicación se ejecuta en <code>localhost</code> (Docker); se demuestra en el video y se reproduce con los comandos del README.</td></tr>
+  </table>
+
+  <h3>Minutos reales del video</h3>
+  <table class="t">
+    <tr><th>Demostración</th><th>Evidencia observable</th><th style="width:28mm">Minuto real</th></tr>
+    <tr><td>Presentación del proyecto y del delegado</td><td>Identificación del equipo y de quien sustenta</td><td><span class="ph">[00:00]</span></td></tr>
+    <tr><td>Inicio de sesión y categorías</td><td>Autenticación y datos consultados</td><td><span class="ph">[00:45]</span></td></tr>
+    <tr><td>Voto válido</td><td>Selección, confirmación y registro</td><td><span class="ph">[01:30]</span></td></tr>
+    <tr><td>Segundo voto en la misma categoría</td><td>Bloqueo del duplicado</td><td><span class="ph">[02:30]</span></td></tr>
+    <tr><td>Voto en otra categoría</td><td>Participación permitida</td><td><span class="ph">[03:30]</span></td></tr>
+    <tr><td>Historial y administración</td><td>Consulta de registros</td><td><span class="ph">[04:15]</span></td></tr>
+    <tr><td>API GET</td><td>Endpoint y JSON con categorías y opciones</td><td><span class="ph">[05:00]</span></td></tr>
+    <tr><td>MySQL y código</td><td>Persistencia y componentes técnicos relevantes</td><td><span class="ph">[06:00]</span></td></tr>
+    <tr><td>Pruebas adicionales y cierre</td><td>Otras validaciones y conclusiones técnicas</td><td><span class="ph">[07:00]</span></td></tr>
+  </table>
+</section>
+
+<!-- ===================== 3. INTRODUCCION ===================== -->
+<section class="page-break">
+  <h2>3. Introducción y objetivo</h2>
+  <p>La Entrega N.º 2 dejó construida la estructura de datos del proyecto: <b>edición → categoría → votación (subevento) → opción</b>, junto con la autenticación de usuarios y el panel administrativo. En esta tercera entrega se implementó el <b>módulo real de votaciones</b> sobre esos mismos modelos y la misma base de datos MySQL, de modo que el equipo puede ahora consultar categorías y opciones, registrar un voto, validar restricciones, consultar la participación y exponer una API GET de consulta con respuesta JSON.</p>
+  <p><b>Objetivo.</b> Integrar modelos, vistas, formularios, rutas, plantillas, persistencia y validaciones del servidor para construir un proceso de votación verificable.</p>
+  <div class="callout"><b>Regla central.</b> Cada usuario puede elegir <b>una sola opción por categoría y edición</b>. Puede votar en otras categorías, pero no emitir un segundo voto en la misma categoría, aunque ésta contenga varios subeventos (votaciones).</div>
+
+  <h3>Qué se implementó y su relación con la Entrega N.º 2</h3>
+  <table class="t">
+    <tr><th>Funcionalidad</th><th>Resultado verificable</th></tr>
+    <tr><td>Categorías y opciones</td><td>Información dinámica desde MySQL asociada a la edición (Entrega 2: modelos <code>Edicion</code>, <code>Categoria</code>, <code>Votacion</code>, <code>Opcion</code>).</td></tr>
+    <tr><td>Autenticación</td><td>Se exige inicio de sesión para registrar un voto (login, registro y cierre de sesión de la Entrega 2).</td></tr>
+    <tr><td>Registro de voto</td><td>Seleccionar una opción, confirmar y guardar el voto real en MySQL (tabla <code>votos</code> ampliada con edición y categoría).</td></tr>
+    <tr><td>Regla de unicidad</td><td>Un voto por usuario, categoría y edición: validación del servidor + restricción única en MySQL.</td></tr>
+    <tr><td>Validaciones</td><td>Se rechazan categorías no habilitadas, votaciones cerradas, opciones que no corresponden y solicitudes no autorizadas (sin sesión o sin token CSRF).</td></tr>
+    <tr><td>Participación y administración</td><td>Página «Mis votos» para el usuario y consulta administrativa de todos los votos con filtros.</td></tr>
+    <tr><td>API GET</td><td><code>GET /api/categorias/</code> entrega categorías, votaciones y opciones desde MySQL en JSON.</td></tr>
+    <tr><td>Integridad</td><td>Transacción con bloqueo de la categoría y restricción única que rechaza solicitudes duplicadas simultáneas.</td></tr>
+  </table>
+  <p><b>Flujo:</b> Iniciar sesión → Elegir categoría → Seleccionar una opción → Confirmar → Validar en el servidor → Registrar en MySQL.</p>
+</section>
+
+<!-- ===================== 4. IMPLEMENTACION TECNICA ===================== -->
+<section class="page-break">
+  <h2>4. Implementación técnica</h2>
+
+  <h3>4.1 Modelo de datos y relaciones</h3>
+  <p>Se partió de los modelos de la Entrega N.º 2 y se adaptó el modelo <code>Voto</code>, que ahora vincula <b>usuario, edición, categoría, votación y opción</b>. La edición y la categoría se guardan en el voto para poder aplicar la restricción de unicidad directamente en la base de datos.</p>
+  <figure class="avoid">
+  <svg viewBox="0 0 1000 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;font-family:Segoe UI,Arial,sans-serif">
+    <defs><marker id="a" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4b2a9b"/></marker></defs>
+    <g>
+      <rect x="10"  y="15" width="205" height="130" rx="10" fill="#f4f1fb" stroke="#4b2a9b" stroke-width="1.5"/><rect x="10" y="15" width="205" height="30" rx="10" fill="#341b72"/><text x="112" y="36" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">ediciones</text>
+      <text x="22" y="68" font-size="13">id (PK)</text><text x="22" y="89" font-size="13">nombre</text><text x="22" y="110" font-size="13">anio (único)</text><text x="22" y="131" font-size="13">activa</text>
+      <rect x="270" y="15" width="205" height="130" rx="10" fill="#f4f1fb" stroke="#4b2a9b" stroke-width="1.5"/><rect x="270" y="15" width="205" height="30" rx="10" fill="#341b72"/><text x="372" y="36" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">categorias</text>
+      <text x="282" y="68" font-size="13">id (PK)</text><text x="282" y="89" font-size="13">edicion_id (FK)</text><text x="282" y="110" font-size="13">nombre (único por edición)</text><text x="282" y="131" font-size="13">activa</text>
+      <rect x="530" y="15" width="215" height="130" rx="10" fill="#f4f1fb" stroke="#4b2a9b" stroke-width="1.5"/><rect x="530" y="15" width="215" height="30" rx="10" fill="#341b72"/><text x="637" y="36" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">votaciones (subeventos)</text>
+      <text x="542" y="68" font-size="13">id (PK)</text><text x="542" y="89" font-size="13">categoria_id (FK)</text><text x="542" y="110" font-size="13">titulo, estado</text><text x="542" y="131" font-size="13">apertura, cierre</text>
+      <rect x="800" y="15" width="190" height="130" rx="10" fill="#f4f1fb" stroke="#4b2a9b" stroke-width="1.5"/><rect x="800" y="15" width="190" height="30" rx="10" fill="#341b72"/><text x="895" y="36" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">opciones</text>
+      <text x="812" y="68" font-size="13">id (PK)</text><text x="812" y="89" font-size="13">votacion_id (FK)</text><text x="812" y="110" font-size="13">nombre</text><text x="812" y="131" font-size="13">descripcion</text>
+    </g>
+    <g stroke="#4b2a9b" stroke-width="2" fill="none" marker-end="url(#a)">
+      <line x1="215" y1="80" x2="268" y2="80"/><line x1="475" y1="80" x2="528" y2="80"/><line x1="745" y1="80" x2="798" y2="80"/>
+    </g>
+    <g font-size="12" fill="#4b2a9b" font-weight="700" text-anchor="middle"><text x="242" y="72">1 : N</text><text x="502" y="72">1 : N</text><text x="772" y="72">1 : N</text></g>
+    <rect x="250" y="250" width="290" height="160" rx="10" fill="#fff8e1" stroke="#f2a900" stroke-width="2"/><rect x="250" y="250" width="290" height="30" rx="10" fill="#f2a900"/><text x="395" y="271" fill="#2b1d00" font-size="15" font-weight="700" text-anchor="middle">votos</text>
+    <text x="262" y="302" font-size="13">id (PK)</text>
+    <text x="262" y="322" font-size="13">user_id (FK) · edicion_id (FK)</text>
+    <text x="262" y="342" font-size="13">categoria_id (FK) · votacion_id (FK)</text>
+    <text x="262" y="362" font-size="13">opcion_id (FK) · created_at</text>
+    <text x="262" y="388" font-size="12" font-weight="700" fill="#8a5d00">ÚNICO (user_id, edicion_id, categoria_id)</text>
+    <rect x="10" y="270" width="190" height="120" rx="10" fill="#f4f1fb" stroke="#4b2a9b" stroke-width="1.5"/><rect x="10" y="270" width="190" height="30" rx="10" fill="#341b72"/><text x="105" y="291" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">users</text>
+    <text x="22" y="322" font-size="13">id (PK)</text><text x="22" y="342" font-size="13">name, email (único)</text><text x="22" y="362" font-size="13">password (hash)</text><text x="22" y="382" font-size="13">rol (admin | votante)</text>
+    <g stroke="#4b2a9b" stroke-width="2" fill="none" marker-end="url(#a)">
+      <line x1="200" y1="330" x2="248" y2="330"/>
+      <path d="M540,330 C640,330 640,250 637,147"/>
+      <path d="M540,380 C760,380 895,300 895,147"/>
+      <path d="M395,250 C395,210 372,190 372,147"/>
+    </g>
+    <g font-size="12" fill="#4b2a9b" font-weight="700"><text x="205" y="322">1:N</text><text x="620" y="236">N:1</text><text x="780" y="372">N:1</text><text x="330" y="205">N:1</text></g>
+  </svg>
+  <figcaption><b>Figura 1. Modelo de datos.</b> La tabla <i>votos</i> vincula usuario, edición, categoría, votación y opción, con restricción única por (usuario, edición, categoría).</figcaption>
+  </figure>
+
+  <h3>4.2 Migraciones</h3>
+  <p>La Entrega N.º 3 agregó una migración sobre la tabla existente de la Entrega N.º 2. Al aplicarla se completan los votos previos con su edición y categoría, y se crea la restricción única. Aplicada en MySQL:</p>
+  <pre>2026_10_24_193951_create_votos_table ............................... [1] Ran
+2026_11_08_000000_add_edicion_categoria_to_votos_table ............. [2] Ran</pre>
+  <span class="file">database/migrations/2026_11_08_000000_add_edicion_categoria_to_votos_table.php</span>
+<pre>Schema::table('votos', function (Blueprint $table) {
+    $table->foreignId('edicion_id')->nullable()->after('user_id')->constrained('ediciones')->cascadeOnDelete();
+    $table->foreignId('categoria_id')->nullable()->after('edicion_id')->constrained('categorias')->cascadeOnDelete();
+});
+<span class="c">// Completa los votos existentes con la categoría y la edición de su votación.</span>
+DB::statement('UPDATE votos SET categoria_id = (SELECT categoria_id FROM votaciones WHERE votaciones.id = votos.votacion_id)');
+DB::statement('UPDATE votos SET edicion_id = (SELECT edicion_id FROM categorias WHERE categorias.id = votos.categoria_id)');
+
+Schema::table('votos', function (Blueprint $table) {
+    $table->unsignedBigInteger('edicion_id')->nullable(false)->change();
+    $table->unsignedBigInteger('categoria_id')->nullable(false)->change();
+    <span class="c">// Regla central: un voto por usuario, categoría y edición</span>
+    $table->unique(['user_id', 'edicion_id', 'categoria_id'], 'votos_unico_usuario_edicion_categoria');
+});</pre>
+  <figure>
+    <img src="capturas/mysql_votos_estructura.png" alt="Estructura de la tabla votos en MySQL" style="width:78%">
+    <figcaption><b>Figura 2. Tabla <code>votos</code> en MySQL (phpMyAdmin).</b> Se ven las columnas <code>edicion_id</code> y <code>categoria_id</code> y el índice único <code>votos_unico_usuario_edicion_categoria</code> sobre (user_id, edicion_id, categoria_id). Demuestra que la regla de unicidad está garantizada en la base de datos.</figcaption>
+  </figure>
+
+  <h3>4.3 Rutas y vistas</h3>
+  <table class="t">
+    <tr><th>Ruta</th><th>Acción</th><th>Vista / respuesta</th></tr>
+    <tr><td><code>GET /</code> · <code>/ediciones</code> · <code>/categorias/{id}</code></td><td>Consulta pública de ediciones y categorías</td><td>Blade (datos de MySQL)</td></tr>
+    <tr><td><code>GET /votaciones/{id}</code></td><td>Opciones de la votación y estado de participación del usuario</td><td><code>votacion.blade.php</code></td></tr>
+    <tr><td><code>POST /votaciones/{id}/confirmar</code></td><td>Confirmación previa (requiere sesión)</td><td><code>confirmar.blade.php</code></td></tr>
+    <tr><td><code>POST /votaciones/{id}/votar</code></td><td>Registra el voto (CSRF, sesión, validaciones)</td><td>Redirección con mensaje</td></tr>
+    <tr><td><code>GET /mis-votos</code></td><td>Categorías votadas y pendientes del usuario</td><td><code>mis-votos.blade.php</code></td></tr>
+    <tr><td><code>GET /admin/votos</code></td><td>Consulta administrativa con filtros (rol administrador)</td><td><code>admin/votos/index.blade.php</code></td></tr>
+    <tr><td><code>GET /api/categorias/</code></td><td>API de consulta en JSON</td><td><code>JSON</code></td></tr>
+  </table>
+
+  <h3>4.4 Validaciones y control de unicidad</h3>
+  <p>El método <code>votar</code> se ejecuta dentro de una transacción que <b>bloquea la fila de la categoría</b>. De esta forma, dos solicitudes simultáneas del mismo usuario se procesan una detrás de otra: la segunda encuentra el voto de la primera y se rechaza. Si aun así una solicitud lograra pasar las validaciones, la <b>restricción única de MySQL</b> lanza una excepción que se captura y se informa como voto duplicado.</p>
+  <span class="file">app/Http/Controllers/PublicoController.php — método votar()</span>
+<pre>try {
+    $error = DB::transaction(function () use ($votacion, $datos, $user) {
+        <span class="c">// Bloqueo de la categoría: serializa las solicitudes simultáneas del mismo usuario.</span>
+        $categoria = Categoria::whereKey($votacion->categoria_id)->lockForUpdate()->firstOrFail();
+        $votacion  = Votacion::whereKey($votacion->id)->firstOrFail();
+
+        if (! $categoria->activa)       { return 'Esta categoría no está habilitada para votar.'; }
+        if (! $votacion->estaAbierta()) { return 'Esta votación no está abierta.'; }
+
+        $opcion = Opcion::where('votacion_id', $votacion->id)->find($datos['opcion_id']);
+        if (! $opcion)                  { return 'La opción no pertenece a esta votación.'; }
+
+        if (Voto::where('user_id', $user->id)->where('categoria_id', $categoria->id)->exists()) {
+            return self::YA_VOTO;       <span class="c">// un voto por usuario, categoría y edición</span>
+        }
+
+        Voto::create([
+            'user_id' => $user->id, 'edicion_id' => $categoria->edicion_id,
+            'categoria_id' => $categoria->id, 'votacion_id' => $votacion->id, 'opcion_id' => $opcion->id,
+        ]);
+        return null;
+    });
+} catch (UniqueConstraintViolationException) {
+    $error = self::YA_VOTO;             <span class="c">// última defensa: la restricción única de MySQL</span>
+}</pre>
+  <table class="t">
+    <tr><th>Control</th><th>Dónde se implementa</th></tr>
+    <tr><td>Sesión obligatoria</td><td>Middleware <code>auth</code> en las rutas de voto (<code>routes/web.php</code>); sin sesión se redirige a <code>/ingresar</code>.</td></tr>
+    <tr><td>Protección CSRF</td><td>Formularios con <code>@csrf</code>; el middleware rechaza solicitudes sin token con HTTP 419.</td></tr>
+    <tr><td>Categoría habilitada / votación abierta</td><td><code>votar()</code> y <code>Votacion::estaAbierta()</code>.</td></tr>
+    <tr><td>Opción pertenece a la votación</td><td>Consulta <code>Opcion::where('votacion_id', …)</code> en <code>votar()</code>.</td></tr>
+    <tr><td>Unicidad usuario-categoría-edición</td><td>Validación en <code>votar()</code> + índice único en MySQL (migración).</td></tr>
+    <tr><td>Concurrencia</td><td>Transacción con <code>lockForUpdate()</code> + índice único + captura de <code>UniqueConstraintViolationException</code>.</td></tr>
+    <tr><td>Acceso administrativo</td><td>Middleware <code>EsAdmin</code> (HTTP 403 para votantes).</td></tr>
+  </table>
+
+  <h3>4.5 API GET /api/categorias/</h3>
+  <p>El endpoint consulta MySQL con Eloquent y responde JSON válido con las categorías habilitadas, su edición, sus votaciones (se omiten las que están en borrador) y las opciones de cada una. Acepta el filtro opcional <code>?edicion_id=</code>. Archivos: <code>routes/api.php</code> y <code>app/Http/Controllers/Api/CategoriaApiController.php</code>.</p>
+  <span class="file">routes/api.php</span>
+<pre>Route::get('/categorias', [CategoriaApiController::class, 'index'])->name('api.categorias');</pre>
+  <span class="file">app/Http/Controllers/Api/CategoriaApiController.php (fragmento)</span>
+<pre>$categorias = Categoria::query()
+    ->with([
+        'edicion:id,nombre,anio,activa',
+        'votaciones' => fn ($q) => $q->where('estado', '!=', Votacion::BORRADOR)->orderBy('id'),
+        'votaciones.opciones' => fn ($q) => $q->orderBy('id'),
+    ])
+    ->where('activa', true)
+    ->when($request->query('edicion_id'), fn ($q, $id) => $q->where('edicion_id', $id))
+    ->orderByDesc('edicion_id')->orderBy('nombre')
+    ->get();
+
+return response()->json(['total' => $categorias->count(), 'data' => /* categorías con votaciones y opciones */]);</pre>
+  <div class="nota">Como el servidor se ejecuta en <code>localhost</code>, la API no es accesible de forma remota para el docente: se demuestra en el video y puede reproducirse clonando el repositorio y ejecutando <code>docker compose up --build</code> (ver README). La ruta <code>/api/categorias/</code> redirige a <code>/api/categorias</code> y responde 200.</div>
+</section>
+
+<!-- ===================== 5. FUNCIONALIDADES ===================== -->
+<section class="page-break">
+  <h2>5. Funcionalidades: proceso de votación y consulta de participación</h2>
+  <p>Capturas reales de la aplicación en ejecución sobre MySQL. Se usó una cuenta de prueba ficticia (<i>Estudiante Demo</i>).</p>
+
+  <h3>5.1 Autenticación y categorías</h3>
+  <figure>
+    <img src="capturas/01_home.png" alt="Inicio con categorías">
+    <figcaption><b>Figura 3. Inicio.</b> Edición activa y categorías leídas de MySQL, con el número de votaciones abiertas de cada una.</figcaption>
+  </figure>
+  <figure>
+    <img src="capturas/cp04_visitante.png" alt="Visitante sin sesión">
+    <figcaption><b>Figura 4. Visitante sin sesión (CP-04).</b> Ve las opciones, pero no puede votar: se le pide ingresar o registrarse y las opciones permanecen bloqueadas.</figcaption>
+  </figure>
+  <figure>
+    <img src="capturas/a01_registro_lleno.png" alt="Registro">
+    <figcaption><b>Figura 5. Registro del usuario de prueba.</b> Formulario con validación del servidor y aceptación del tratamiento de datos.</figcaption>
+  </figure>
+
+  <h3>5.2 Voto válido (CP-01)</h3>
+  <figure>
+    <img src="capturas/cp01_opcion_elegida.png" alt="Opción seleccionada">
+    <figcaption><b>Figura 6. Selección de una opción.</b> Usuario autenticado en <i>Música › Canción favorita del público</i> elige «Canción B».</figcaption>
+  </figure>
+  <figure>
+    <img src="capturas/cp01_confirmar.png" alt="Confirmación" style="width:62%">
+    <figcaption><b>Figura 7. Confirmación.</b> El sistema muestra la opción elegida y pide confirmar antes de registrar (el formulario incluye token CSRF).</figcaption>
+  </figure>
+  <figure>
+    <img src="capturas/cp01_registrado.png" alt="Voto registrado" style="width:62%">
+    <figcaption><b>Figura 8. Voto registrado.</b> El voto se guardó en MySQL con usuario, edición, categoría, votación y opción.</figcaption>
+  </figure>
+
+  <h3>5.3 Segundo voto en la misma categoría (CP-02)</h3>
+  <figure>
+    <img src="capturas/cp02_misma_votacion.png" alt="Misma votación bloqueada">
+    <figcaption><b>Figura 9. Misma votación.</b> Al volver a la votación, el usuario ve que ya votó por «Canción B» y las opciones están bloqueadas.</figcaption>
+  </figure>
+  <figure>
+    <img src="capturas/cp02_otro_subevento.png" alt="Otro subevento bloqueado">
+    <figcaption><b>Figura 10. Otro subevento de la misma categoría.</b> En «Acordeonero del año» (también de la categoría Música) el sistema bloquea el voto e informa que ya votó en la categoría: demuestra que la regla aplica a toda la categoría y no solo a una votación.</figcaption>
+  </figure>
+
+  <h3>5.4 Voto en otra categoría (CP-03)</h3>
+  <figure>
+    <img src="capturas/cp03_registrado.png" alt="Voto en otra categoría" style="width:62%">
+    <figcaption><b>Figura 11. Voto en «Danza y folclor».</b> El mismo usuario sí puede votar en una categoría diferente; el sistema lo registra.</figcaption>
+  </figure>
+
+  <h3>5.5 Participación del usuario (CP-07)</h3>
+  <figure>
+    <img src="capturas/cp07_mis_votos.png" alt="Mis votos">
+    <figcaption><b>Figura 12. «Mis votos».</b> Lista las categorías votadas con edición, votación, opción y fecha, y las categorías pendientes. Coincide con lo registrado en MySQL.</figcaption>
+  </figure>
+
+  <h3>5.6 Consulta administrativa (CP-08)</h3>
+  <figure>
+    <img src="capturas/cp08_admin_votos.png" alt="Consulta administrativa de votos">
+    <figcaption><b>Figura 13. Votos registrados (administrador).</b> Consulta con filtros por edición, categoría y votante. Se muestra filtrada por las cuentas de prueba (<i>festival.test</i>) para no exponer datos personales.</figcaption>
+  </figure>
+  <figure>
+    <img src="capturas/cp08_mysql_consulta.png" alt="Consulta SQL en MySQL" style="width:92%">
+    <figcaption><b>Figura 14. Misma consulta directamente en MySQL.</b> Los votos 7, 6 y 2 coinciden con los de la Figura 13 (mismas edición, categoría, votación y opción), lo que demuestra que los datos del administrador son los de la base de datos.</figcaption>
+  </figure>
+
+  <h3>5.7 API GET (CP-10)</h3>
+  <figure>
+    <img src="capturas/cp10_api_json.png" alt="API en el navegador" style="width:80%">
+    <figcaption><b>Figura 15. <code>GET /api/categorias/</code> en el navegador.</b> JSON válido con categorías, edición, votaciones y opciones reales leídas de MySQL (id y nombre coinciden con la base).</figcaption>
+  </figure>
+</section>
+
+<!-- ===================== 6. PRUEBAS ===================== -->
+<section class="page-break">
+  <h2>6. Pruebas</h2>
+  <p>Las diez pruebas funcionales (CP-01 a CP-10) están automatizadas en <code>tests/Feature/Entrega3Test.php</code> y se verificaron además con solicitudes reales contra el servidor con MySQL. Estado: <span class="estado-ok">todas aprobadas</span>.</p>
+
+  <table class="t">
+    <tr><th style="width:13mm">Caso</th><th>Procedimiento</th><th>Resultado esperado</th><th>Resultado obtenido</th><th style="width:15mm">Estado</th><th style="width:30mm">Evidencia</th></tr>
+    <tr><td>CP-01</td><td>Usuario autenticado selecciona una opción válida y confirma.</td><td>Se registra un voto en MySQL.</td><td>Voto guardado con usuario, edición, categoría, votación y opción.</td><td class="estado-ok">Aprobado</td><td>Fig. 6-8, Fig. 14<br>PHPUnit CP-01<br>Video <span class="ph">[mm:ss]</span></td></tr>
+    <tr><td>CP-02</td><td>Intenta votar otra vez en la misma categoría, con otra opción o en otro subevento.</td><td>Se rechaza el segundo voto.</td><td>Mensaje «Ya votaste en esta categoría…»; sigue existiendo un solo voto.</td><td class="estado-ok">Aprobado</td><td>Fig. 9-10<br>PHPUnit CP-02<br>Video <span class="ph">[mm:ss]</span></td></tr>
+    <tr><td>CP-03</td><td>Vota en una categoría diferente.</td><td>Se permite el voto.</td><td>Voto registrado en «Danza y folclor».</td><td class="estado-ok">Aprobado</td><td>Fig. 11-12<br>PHPUnit CP-03<br>Video <span class="ph">[mm:ss]</span></td></tr>
+    <tr><td>CP-04</td><td>Usuario no autenticado intenta votar (formulario y POST directo).</td><td>Se exige autenticación.</td><td>Formulario bloqueado; el POST responde HTTP 302 a <code>/ingresar</code>.</td><td class="estado-ok">Aprobado</td><td>Fig. 4, Tabla 6.1<br>PHPUnit CP-04<br>Video <span class="ph">[mm:ss]</span></td></tr>
+    <tr><td>CP-05</td><td>Intenta votar en una categoría no habilitada y en una votación cerrada.</td><td>Se rechaza la operación.</td><td>«Esta categoría no está habilitada para votar.» y «Esta votación no está abierta.»</td><td class="estado-ok">Aprobado</td><td>Tabla 6.1<br>PHPUnit CP-05<br>Video <span class="ph">[mm:ss]</span></td></tr>
+    <tr><td>CP-06</td><td>Envía por POST una opción que pertenece a otra categoría.</td><td>Se rechaza la operación.</td><td>«La opción no pertenece a esta votación.» No se crea ningún voto.</td><td class="estado-ok">Aprobado</td><td>Tabla 6.1<br>PHPUnit CP-06<br>Video <span class="ph">[mm:ss]</span></td></tr>
+    <tr><td>CP-07</td><td>El usuario consulta sus categorías votadas.</td><td>Se muestran registros correctos.</td><td>«Mis votos» lista solo los votos del usuario, con su opción y fecha.</td><td class="estado-ok">Aprobado</td><td>Fig. 12<br>PHPUnit CP-07<br>Video <span class="ph">[mm:ss]</span></td></tr>
+    <tr><td>CP-08</td><td>El administrador consulta los votos.</td><td>Los datos coinciden con MySQL.</td><td>Mismos registros que la consulta SQL directa; un votante recibe HTTP 403.</td><td class="estado-ok">Aprobado</td><td>Fig. 13-14<br>PHPUnit CP-08<br>Video <span class="ph">[mm:ss]</span></td></tr>
+    <tr><td>CP-09</td><td>Se envían dos o más solicitudes simultáneas a la misma categoría.</td><td>Solo queda un voto válido.</td><td>10 solicitudes simultáneas: 1 voto registrado y 9 rechazadas; en MySQL queda 1 voto.</td><td class="estado-ok">Aprobado</td><td>Tabla 6.2<br>PHPUnit CP-09<br>Video <span class="ph">[mm:ss]</span></td></tr>
+    <tr><td>CP-10</td><td>Se consulta <code>GET /api/categorias/</code>.</td><td>JSON válido con categorías y opciones reales.</td><td>HTTP 200, <code>application/json</code>, 3 categorías con sus votaciones y opciones.</td><td class="estado-ok">Aprobado</td><td>Fig. 15<br>PHPUnit CP-10<br>Video <span class="ph">[mm:ss]</span></td></tr>
+  </table>
+
+  <h3>6.1 Rechazos verificados con solicitudes reales (CP-04, CP-05, CP-06 y CSRF)</h3>
+  <p>Solicitudes POST enviadas al servidor en ejecución (Docker + MySQL), con datos temporales creados solo para la prueba y eliminados después:</p>
+  <pre>CP-04   | POST /votaciones/1/votar sin iniciar sesion | HTTP 302 -&gt; /ingresar
+CP-05a  | POST a votacion CERRADA                     | HTTP 200 -&gt; Esta votación no está abierta.
+CP-05b  | POST a categoria NO HABILITADA              | HTTP 200 -&gt; Esta categoría no está habilitada para votar.
+CP-06   | POST con opcion de OTRA categoria           | HTTP 200 -&gt; La opción no pertenece a esta votación.
+CSRF    | POST autenticado SIN token CSRF             | HTTP 419 (Page Expired)</pre>
+
+  <h3>6.2 Concurrencia (CP-09)</h3>
+  <p>Se envían 10 solicitudes <code>POST</code> a la vez (hilos con barrera de sincronización) con la misma sesión de un usuario nuevo, contra la misma categoría. Script: <code>docs/entrega3/prueba_concurrencia.py</code> en el repositorio.</p>
+  <pre>Solicitudes simultaneas enviadas: 10
+  RECHAZADO (ya votaste en la categoria): 9
+  VOTO REGISTRADO: 1
+Votos guardados en MySQL para ese usuario en la categoria: 1</pre>
+
+  <h3>6.3 Resultado de la suite automática</h3>
+  <p>Comando: <code>php artisan test</code> (22 pruebas: las 10 de esta entrega y las 12 de las entregas anteriores).</p>
+  <pre>Entrega3
+ ✔ Cp01 voto valido se registra
+ ✔ Cp02 segundo voto en la misma categoria es rechazado
+ ✔ Cp03 otra categoria se permite
+ ✔ Cp04 no autenticado debe iniciar sesion
+ ✔ Cp05 categoria no habilitada se rechaza
+ ✔ Cp06 opcion de otra categoria se rechaza
+ ✔ Cp07 usuario consulta sus categorias votadas
+ ✔ Cp08 administrador consulta los votos
+ ✔ Cp09 la base de datos impide votos duplicados
+ ✔ Cp10 api devuelve categorias y opciones
+(Reporte Excel: 3 · Votacion: 8)
+
+OK (22 tests, 90 assertions)</pre>
+  <figure class="sm">
+    <img src="capturas/30_mysql_tablas.png" alt="Tablas MySQL" style="width:72%">
+    <figcaption><b>Figura 16. Base de datos <code>votaciones</code> en MySQL.</b> Tablas del modelo con datos reales de la aplicación (ediciones, categorías, votaciones, opciones, votos y usuarios).</figcaption>
+  </figure>
+</section>
+
+<!-- ===================== 7. CONCLUSIONES ===================== -->
+<section class="page-break">
+  <h2>7. Conclusiones y equipo</h2>
+
+  <h3>7.1 Logros</h3>
+  <ul>
+    <li>Módulo real de votaciones funcionando sobre MySQL, integrado con los modelos y el panel de la Entrega N.º 2.</li>
+    <li>Regla central garantizada en tres capas: validación del servidor, transacción con bloqueo y restricción única en la base de datos.</li>
+    <li>Participación visible para el usuario («Mis votos») y para el administrador (consulta con filtros y reporte en Excel).</li>
+    <li>API GET en JSON con datos reales, diez casos de prueba documentados y automatizados (22 pruebas aprobadas).</li>
+  </ul>
+
+  <h3>7.2 Dificultades</h3>
+  <ul>
+    <li>Adaptar el modelo de votos ya existente sin perder datos: la migración completa los votos previos con su edición y categoría antes de crear la restricción única.</li>
+    <li>Garantizar la unicidad ante solicitudes simultáneas, resuelto con bloqueo de la categoría y restricción en MySQL, y verificado con una prueba de 10 solicitudes paralelas.</li>
+    <li>Demostrar la API sin un servidor público: se ejecuta en <code>localhost</code> y se documenta cómo reproducirla.</li>
+  </ul>
+
+  <h3>7.3 Pendientes</h3>
+  <ul>
+    <li>Validar con el cliente el texto legal de tratamiento de datos y la regla de inmutabilidad del voto.</li>
+    <li>Recuperación de contraseña, verificación de correo y carga de imágenes para las opciones.</li>
+    <li>Despliegue en un servidor público con credenciales propias.</li>
+  </ul>
+
+  <h3>7.4 Aportes de los cuatro integrantes</h3>
+  <table class="t">
+    <tr><th style="width:55mm">Integrante</th><th>Aportes</th></tr>
+    <tr><td><span class="ph">[Integrante 1]</span></td><td><span class="ph">[Describir aportes]</span></td></tr>
+    <tr><td><span class="ph">[Integrante 2]</span></td><td><span class="ph">[Describir aportes]</span></td></tr>
+    <tr><td><span class="ph">[Integrante 3]</span></td><td><span class="ph">[Describir aportes]</span></td></tr>
+    <tr><td><span class="ph">[Integrante 4]</span></td><td><span class="ph">[Describir aportes]</span></td></tr>
+  </table>
+  <p><b>Sustentación:</b> <span class="ph">[Delegado del equipo / todos los integrantes]</span></p>
+</section>
+
+</body>
+</html>

@@ -10,7 +10,8 @@ class EsAdmin
 {
     public function handle(Request $request, Closure $next): Response
     {
-        abort_unless($request->user()?->esAdmin(), 403, 'Acceso solo para administradores.');
+        $user = $request->user();
+        abort_unless($user && $user->esAdmin() && $user->estaActivo(), 403, 'Acceso solo para administradores.');
 
         return $next($request);
     }

@@ -23,7 +23,8 @@
                 <li class="nav-item"><a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Inicio</a></li>
                 <li class="nav-item"><a class="nav-link {{ request()->routeIs('ediciones', 'edicion') ? 'active' : '' }}" href="{{ route('ediciones') }}">Ediciones</a></li>
                 @auth
-                    @if(auth()->user()->esAdmin())
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('mis-votos') ? 'active' : '' }}" href="{{ route('mis-votos') }}">Mis votos</a></li>
+                    @if(auth()->user()->tieneAccesoPanel())
                         <li class="nav-item ms-md-2"><a class="btn btn-sm btn-gold" href="{{ route('admin.panel') }}"><i class="bi bi-speedometer2 me-1"></i>Administración</a></li>
                     @endif
                     <li class="nav-item ms-md-2">

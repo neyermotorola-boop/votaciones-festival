@@ -43,6 +43,10 @@ class CategoriaController extends Controller
     public function update(Request $request, Categoria $categoria)
     {
         $datos = $this->validar($request, $categoria);
+        // Integridad: un voto queda ligado a la edición de su categoría; no se mueve una categoría que ya tiene votos.
+        if ((int) $datos['edicion_id'] !== $categoria->edicion_id && $categoria->votaciones()->whereHas('votos')->exists()) {
+            return back()->withInput()->withErrors(['edicion_id' => 'No se puede cambiar la edición de una categoría que ya tiene votos.']);
+        }
         $categoria->update($datos + ['activa' => $request->boolean('activa')]);
         Bitacora::registrar('Editar categoría', $categoria->nombre);
 

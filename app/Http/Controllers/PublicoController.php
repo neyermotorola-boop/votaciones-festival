@@ -8,11 +8,14 @@ use App\Models\Edicion;
 use App\Models\Opcion;
 use App\Models\Votacion;
 use App\Models\Voto;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class PublicoController extends Controller
 {
+    private const YA_VOTO = 'Ya votaste en esta categoría. Solo se permite un voto por categoría y edición.';
+
     public function home()
     {
         $edicion = Edicion::activa();
@@ -51,59 +54,118 @@ class PublicoController extends Controller
     public function votacion(Votacion $votacion)
     {
         abort_if($votacion->estado === Votacion::BORRADOR, 404);
-        $votacion->load('categoria', 'opciones');
+        $votacion->load('categoria.edicion', 'opciones');
 
-        $misVotos = auth()->check() ? $votacion->votosDe(auth()->user()) : 0;
-        $votadas = auth()->check()
-            ? $votacion->votos()->where('user_id', auth()->id())->pluck('opcion_id')->all()
-            : [];
+        // Regla central: un solo voto por usuario, categoría y edición.
+        $votoCategoria = auth()->check()
+            ? Voto::with('opcion', 'votacion')->where('user_id', auth()->id())->where('categoria_id', $votacion->categoria_id)->first()
+            : null;
+        $votadas = $votoCategoria && $votoCategoria->votacion_id === $votacion->id ? [$votoCategoria->opcion_id] : [];
 
         $resultados = $votacion->resultados_publicos ? $this->resultados($votacion) : null;
 
-        return view('votacion', compact('votacion', 'misVotos', 'votadas', 'resultados'));
+        return view('votacion', compact('votacion', 'votoCategoria', 'votadas', 'resultados'));
+    }
+
+    /** Historial del votante: categorías en las que ya participó y las que le faltan. */
+    public function misVotos(Request $request)
+    {
+        $user = $request->user();
+        $votos = Voto::with(['edicion', 'categoria', 'votacion', 'opcion'])
+            ->where('user_id', $user->id)->latest()->get();
+
+        $edicion = Edicion::activa();
+        $pendientes = $edicion
+            ? $edicion->categorias()->where('activa', true)
+                ->whereHas('votaciones', fn ($q) => $q->where('estado', Votacion::ABIERTA))
+                ->whereNotIn('id', $votos->pluck('categoria_id'))->get()
+            : collect();
+
+        return view('mis-votos', compact('votos', 'pendientes', 'edicion'));
     }
 
     public function confirmar(Request $request, Votacion $votacion)
     {
+        if ($redirigir = $this->exigirDocumento($request)) {
+            return $redirigir;
+        }
         $datos = $request->validate(['opcion_id' => ['required', 'integer']]);
         $opcion = $votacion->opciones()->findOrFail($datos['opcion_id']);
+
+        if (self::yaVoto($request->user(), $votacion->categoria_id)) {
+            return redirect()->route('votacion', $votacion)->with('error', self::YA_VOTO);
+        }
 
         return view('confirmar', compact('votacion', 'opcion'));
     }
 
     public function votar(Request $request, Votacion $votacion)
     {
+        if ($redirigir = $this->exigirDocumento($request)) {
+            return $redirigir;
+        }
         $datos = $request->validate(['opcion_id' => ['required', 'integer']]);
         $user = $request->user();
 
-        $error = DB::transaction(function () use ($votacion, $datos, $user) {
-            // Bloqueo para evitar votos duplicados concurrentes.
-            $votacion = Votacion::whereKey($votacion->id)->lockForUpdate()->first();
+        try {
+            $error = DB::transaction(function () use ($votacion, $datos, $user) {
+                // Bloqueo de la categoría: serializa las solicitudes simultáneas del mismo usuario.
+                $categoria = Categoria::whereKey($votacion->categoria_id)->lockForUpdate()->firstOrFail();
+                $votacion = Votacion::whereKey($votacion->id)->firstOrFail();
 
-            if (! $votacion->estaAbierta()) {
-                return 'Esta votación no está abierta.';
-            }
-            $opcion = Opcion::where('votacion_id', $votacion->id)->find($datos['opcion_id']);
-            if (! $opcion) {
-                return 'La opción no pertenece a esta votación.';
-            }
-            if (Voto::where('user_id', $user->id)->where('votacion_id', $votacion->id)->count() >= $votacion->votos_por_usuario) {
-                return 'Ya alcanzaste el máximo de votos permitidos en esta votación.';
-            }
-            if (Voto::where('user_id', $user->id)->where('opcion_id', $opcion->id)->exists()) {
-                return 'Ya votaste por esta opción.';
-            }
+                if (! $categoria->activa) {
+                    return 'Esta categoría no está habilitada para votar.';
+                }
+                if (! $votacion->estaAbierta()) {
+                    return 'Esta votación no está abierta.';
+                }
+                $opcion = Opcion::where('votacion_id', $votacion->id)->find($datos['opcion_id']);
+                if (! $opcion) {
+                    return 'La opción no pertenece a esta votación.';
+                }
+                if (self::yaVoto($user, $categoria->id)) {
+                    return self::YA_VOTO;
+                }
 
-            Voto::create(['user_id' => $user->id, 'votacion_id' => $votacion->id, 'opcion_id' => $opcion->id]);
+                Voto::create([
+                    'user_id' => $user->id,
+                    'edicion_id' => $categoria->edicion_id,
+                    'categoria_id' => $categoria->id,
+                    'votacion_id' => $votacion->id,
+                    'opcion_id' => $opcion->id,
+                ]);
 
-            return null;
-        });
+                return null;
+            });
+        } catch (UniqueConstraintViolationException) {
+            // Última defensa: la restricción única de MySQL rechazó un voto duplicado.
+            $error = self::YA_VOTO;
+        }
 
         if ($error) {
             return redirect()->route('votacion', $votacion)->with('error', $error);
         }
 
         return redirect()->route('votacion.gracias', $votacion);
+    }
+
+    /** Para votar, la cuenta debe tener documento registrado (identifica a la persona). */
+    private function exigirDocumento(Request $request)
+    {
+        if (! $request->user()->tieneDocumento()) {
+            return redirect()->route('documento')->with('error', 'Registra tu documento de identidad para poder votar.');
+        }
+
+        return null;
+    }
+
+    /** ¿Esta persona ya votó en la categoría? Se comprueba por cuenta y también por documento. */
+    public static function yaVoto(\App\Models\User $user, int $categoriaId): bool
+    {
+        return Voto::where('categoria_id', $categoriaId)
+            ->where(fn ($q) => $q->where('user_id', $user->id)
+                ->orWhere(fn ($w) => $w->whereNotNull('documento')->where('documento', $user->documento)))
+            ->exists();
     }
 
     public function gracias(Votacion $votacion)

@@ -27,7 +27,9 @@ class ReporteExcelTest extends TestCase
         $vb->opciones()->create(['nombre' => 'Pareja 1']);
 
         $votante = User::factory()->create(['rol' => 'votante']);
-        $vc->votos()->create(['user_id' => $votante->id, 'opcion_id' => $a->id]);
+        $vc->votos()->create([
+            'user_id' => $votante->id, 'edicion_id' => $edicion->id, 'categoria_id' => $canciones->id, 'opcion_id' => $a->id,
+        ]);
 
         return [$edicion, $canciones, $baile];
     }

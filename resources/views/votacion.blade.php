@@ -14,12 +14,12 @@
     </div>
     @if($votacion->descripcion)<p class="text-muted mb-3">{{ $votacion->descripcion }}</p>@endif
     <div class="meta">
-        <span><i class="bi bi-person-check"></i>Votos por persona: <b class="text-body">{{ $votacion->votos_por_usuario }}</b></span>
+        <span><i class="bi bi-person-check"></i>Regla: <b class="text-body">1 voto por categoría y edición</b></span>
         @if($votacion->cierre)<span><i class="bi bi-clock"></i>Cierre: <b class="text-body">{{ $votacion->cierre->translatedFormat('d M Y, H:i') }}</b></span>@endif
     </div>
 </div>
 
-@php $abierta = $votacion->estaAbierta(); $limite = $misVotos >= $votacion->votos_por_usuario; @endphp
+@php $abierta = $votacion->estaAbierta(); $limite = (bool) $votoCategoria; @endphp
 
 @if($abierta)
     @guest
@@ -35,7 +35,17 @@
         </div>
     @endguest
     @if(auth()->check() && $limite)
-        <div class="alert alert-info"><i class="bi bi-patch-check-fill"></i><div>Ya usaste tus {{ $votacion->votos_por_usuario }} voto(s) en esta votación. Gracias por participar.</div></div>
+        <div class="alert alert-info"><i class="bi bi-patch-check-fill"></i>
+            <div>
+                @if($votoCategoria->votacion_id === $votacion->id)
+                    Ya votaste en esta votación por <b>{{ $votoCategoria->opcion->nombre }}</b>.
+                @else
+                    Ya votaste en la categoría <b>{{ $votacion->categoria->nombre }}</b> (votación «{{ $votoCategoria->votacion->titulo }}», opción <b>{{ $votoCategoria->opcion->nombre }}</b>).
+                @endif
+                Solo se permite un voto por categoría y edición; puedes participar en las demás categorías.
+                <a href="{{ route('mis-votos') }}" class="fw-semibold">Ver mis votos</a>
+            </div>
+        </div>
     @endif
     <form method="post" action="{{ route('votacion.confirmar', $votacion) }}">
         @csrf

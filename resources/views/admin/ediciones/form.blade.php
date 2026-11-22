@@ -16,6 +16,14 @@
     </div>
     <div class="mb-3"><label class="form-label" for="descripcion">Descripción</label>
         <textarea id="descripcion" name="descripcion" rows="3" class="form-control">{{ old('descripcion', $edicion->descripcion) }}</textarea></div>
+    @if(! $edicion->exists && $anteriores->isNotEmpty())
+    <div class="mb-3"><label class="form-label" for="copiar_de">Copiar estructura de una edición anterior (opcional)</label>
+        <select id="copiar_de" name="copiar_de" class="form-select">
+            <option value="">No copiar: empezar vacía</option>
+            @foreach($anteriores as $a)<option value="{{ $a->id }}" @selected(old('copiar_de') == $a->id)>{{ $a->nombre }}</option>@endforeach
+        </select>
+        <div class="form-text">Copia categorías, votaciones y opciones. Las votaciones quedan en borrador y sin votos.</div></div>
+    @endif
     <div class="form-check form-switch">
         <input class="form-check-input" type="checkbox" name="activa" value="1" id="act" @checked(old('activa', $edicion->activa))>
         <label class="form-check-label" for="act">Edición activa (se muestra en el sitio público)</label></div>

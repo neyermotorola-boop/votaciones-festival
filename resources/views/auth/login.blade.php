@@ -27,6 +27,7 @@
             @error('password')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>
     </div>
+    <div class="text-end mb-2"><a href="{{ route('recuperar') }}">¿Olvidaste tu contraseña?</a></div>
     <div class="form-check mb-4">
         <input class="form-check-input" type="checkbox" name="recordar" id="rec" @checked(old('recordar'))>
         <label class="form-check-label" for="rec">Mantener sesión iniciada</label>
