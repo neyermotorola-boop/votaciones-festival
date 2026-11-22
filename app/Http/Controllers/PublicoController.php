@@ -9,6 +9,7 @@ use App\Models\Opcion;
 use App\Models\Votacion;
 use App\Models\Voto;
 use Illuminate\Database\UniqueConstraintViolationException;
+use App\Notifications\VotoRegistrado;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -108,7 +109,7 @@ class PublicoController extends Controller
         $user = $request->user();
 
         try {
-            $error = DB::transaction(function () use ($votacion, $datos, $user) {
+            $resultado = DB::transaction(function () use ($votacion, $datos, $user) {
                 // Bloqueo de la categoría: serializa las solicitudes simultáneas del mismo usuario.
                 $categoria = Categoria::whereKey($votacion->categoria_id)->lockForUpdate()->firstOrFail();
                 $votacion = Votacion::whereKey($votacion->id)->firstOrFail();
@@ -127,24 +128,26 @@ class PublicoController extends Controller
                     return self::YA_VOTO;
                 }
 
-                Voto::create([
+                return Voto::create([
                     'user_id' => $user->id,
                     'edicion_id' => $categoria->edicion_id,
                     'categoria_id' => $categoria->id,
                     'votacion_id' => $votacion->id,
                     'opcion_id' => $opcion->id,
                 ]);
-
-                return null;
             });
         } catch (UniqueConstraintViolationException) {
             // Última defensa: la restricción única de MySQL rechazó un voto duplicado.
-            $error = self::YA_VOTO;
+            $resultado = self::YA_VOTO;
         }
 
-        if ($error) {
-            return redirect()->route('votacion', $votacion)->with('error', $error);
+        // La transacción devuelve un texto (motivo de rechazo) o el voto creado.
+        if (is_string($resultado)) {
+            return redirect()->route('votacion', $votacion)->with('error', $resultado);
         }
+
+        // Comprobante por correo (se envía en cola; si falla, el voto ya quedó guardado).
+        $user->notificarCorreo(new VotoRegistrado($resultado));
 
         return redirect()->route('votacion.gracias', $votacion);
     }

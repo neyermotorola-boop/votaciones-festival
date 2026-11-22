@@ -110,6 +110,15 @@ return [
     |
     */
 
+    /*
+    | Tema visual de los correos: resources/views/vendor/mail/html/themes/festival.css
+    | (colores institucionales).
+    */
+    'markdown' => [
+        'theme' => env('MAIL_MARKDOWN_THEME', 'festival'),
+        'paths' => [resource_path('views/vendor/mail')],
+    ],
+
     'from' => [
         'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
         'name' => env('MAIL_FROM_NAME', env('APP_NAME', 'Laravel')),

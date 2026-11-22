@@ -1,24 +1,47 @@
+x-app-env: &app-env
+  APP_ENV: local
+  APP_DEBUG: "true"
+  APP_URL: http://localhost:8080
+  DB_CONNECTION: mysql
+  DB_HOST: db
+  DB_PORT: 3306
+  DB_DATABASE: votaciones
+  DB_USERNAME: votaciones
+  DB_PASSWORD: secret
+
 services:
   app:
     build: .
+    image: votaciones-festival:local
     container_name: votaciones_app
     ports:
       - "8080:80"
     volumes:
       - .:/var/www/html
+      # vendor vive en un volumen de Docker (no en el disco de Windows): carga mucho más rápido.
+      - vendor:/var/www/html/vendor
     environment:
-      APP_ENV: local
-      APP_DEBUG: "true"
-      APP_URL: http://localhost:8080
-      DB_CONNECTION: mysql
-      DB_HOST: db
-      DB_PORT: 3306
-      DB_DATABASE: votaciones
-      DB_USERNAME: votaciones
-      DB_PASSWORD: secret
+      <<: *app-env
       SEED_DEMO: "true"
     depends_on:
       - db
+      - mailpit
+
+  # Envía en segundo plano los correos de notificación (cola "database").
+  queue:
+    build: .
+    image: votaciones-festival:local
+    container_name: votaciones_queue
+    command: ["php", "artisan", "queue:work", "--tries=3", "--backoff=30", "--sleep=3"]
+    volumes:
+      - .:/var/www/html
+      - vendor:/var/www/html/vendor
+    environment:
+      <<: *app-env
+      CONTAINER_ROLE: worker
+    depends_on:
+      - app
+    restart: unless-stopped
 
   db:
     image: mysql:8.4
@@ -33,6 +56,13 @@ services:
     ports:
       - "3307:3306"
 
+  # Buzón de pruebas: captura todos los correos en desarrollo (http://localhost:8025).
+  mailpit:
+    image: axllent/mailpit:v1.21
+    container_name: votaciones_mailpit
+    ports:
+      - "8025:8025"
+
   phpmyadmin:
     image: phpmyadmin:5
     container_name: votaciones_pma
@@ -45,3 +75,4 @@ services:
 
 volumes:
   dbdata:
+  vendor:

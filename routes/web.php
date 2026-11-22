@@ -19,8 +19,12 @@ Route::middleware('guest')->group(function () {
     Route::post('/registro', [AuthController::class, 'registro'])->middleware('throttle:10,1');
     Route::get('/ingresar', [AuthController::class, 'loginForm'])->name('login');
     Route::post('/ingresar', [AuthController::class, 'login'])->middleware('throttle:10,1');
-    Route::get('/recuperar', [AuthController::class, 'recuperarForm'])->name('recuperar');
-    Route::post('/recuperar', [AuthController::class, 'recuperar'])->middleware('throttle:5,1');
+    Route::get('/olvide-contrasena', [AuthController::class, 'olvideForm'])->name('password.request');
+    Route::post('/olvide-contrasena', [AuthController::class, 'olvide'])->middleware('throttle:5,1')->name('password.email');
+    Route::get('/restablecer-contrasena/{token}', [AuthController::class, 'restablecerForm'])->name('password.reset');
+    Route::post('/restablecer-contrasena', [AuthController::class, 'restablecer'])->middleware('throttle:10,1')->name('password.update');
+    // Ruta anterior de recuperación (citada en la documentación): lleva al flujo con enlace seguro.
+    Route::redirect('/recuperar', '/olvide-contrasena')->name('recuperar');
 });
 
 Route::middleware('auth')->group(function () {
@@ -61,7 +65,20 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
         Route::post('votaciones/{votacion}/estado', [Admin\VotacionController::class, 'estado'])->name('votaciones.estado');
         Route::post('votaciones/{votacion}/publicar', [Admin\VotacionController::class, 'publicar'])->name('votaciones.publicar');
         Route::post('votaciones/{votacion}/opciones', [Admin\VotacionController::class, 'opcionStore'])->name('opciones.store');
+        Route::put('votaciones/{votacion}/opciones/{opcion}', [Admin\VotacionController::class, 'opcionUpdate'])->name('opciones.update');
         Route::delete('votaciones/{votacion}/opciones/{opcion}', [Admin\VotacionController::class, 'opcionDestroy'])->name('opciones.destroy');
+    });
+
+    // Exportación a Excel de cada tabla: cada una exige el mismo permiso que su sección.
+    Route::prefix('exportar')->name('exportar.')->controller(Admin\ExportarController::class)->group(function () {
+        Route::get('ediciones', 'ediciones')->middleware(PermisoAdmin::class.':ediciones')->name('ediciones');
+        Route::get('categorias', 'categorias')->middleware(PermisoAdmin::class.':categorias')->name('categorias');
+        Route::get('votaciones', 'votaciones')->middleware(PermisoAdmin::class.':votaciones')->name('votaciones');
+        Route::get('votaciones/{votacion}/opciones', 'opciones')->middleware(PermisoAdmin::class.':votaciones')->name('opciones');
+        Route::get('votos', 'votos')->middleware(PermisoAdmin::class.':resultados')->name('votos');
+        // Datos personales y bitácora: solo el administrador.
+        Route::get('votantes', 'votantes')->middleware(EsAdmin::class)->name('votantes');
+        Route::get('bitacora', 'bitacora')->middleware(EsAdmin::class)->name('bitacora');
     });
 
     // Usuarios y permisos: solo el administrador.

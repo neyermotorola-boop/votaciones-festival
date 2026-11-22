@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('titulo', 'Inicio')
 @section('contenido')
-<section class="hero mb-4" style="background-image:url('{{ asset('img/vallenato.png') }}')">
+<section class="hero mb-4" style="background-image:url('{{ asset('img/vallenato.jpg') }}')">
     <div>
         <span class="eyebrow mb-2">Edición {{ $edicion?->anio ?? date('Y') }}</span>
         <h1>{{ $edicion?->nombre ?? 'Festival de la Leyenda Vallenata' }}</h1>

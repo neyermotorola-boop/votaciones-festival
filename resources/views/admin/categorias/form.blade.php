@@ -21,6 +21,10 @@
     <div class="form-check form-switch">
         <input class="form-check-input" type="checkbox" name="activa" value="1" id="act" @checked(old('activa', $categoria->activa))>
         <label class="form-check-label" for="act">Categoría activa</label></div>
+    <div class="form-check form-switch mt-2">
+        <input class="form-check-input" type="checkbox" name="opciones_con_imagen" value="1" id="oci" @checked(old('opciones_con_imagen', $categoria->opciones_con_imagen))>
+        <label class="form-check-label" for="oci">Los participantes llevan foto</label>
+        <div class="form-text">Actívalo cuando el público reconoce al participante por su imagen (concursantes, artistas, agrupaciones). Desactivado, los participantes se muestran solo con texto.</div></div>
     <div class="form-actions">
         <button class="btn btn-brand">Guardar</button>
         <a class="btn btn-ghost" href="{{ route('admin.categorias.index') }}">Cancelar</a>

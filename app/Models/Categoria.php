@@ -11,9 +11,9 @@ class Categoria extends Model
 {
     protected $table = 'categorias';
 
-    protected $fillable = ['edicion_id', 'nombre', 'descripcion', 'icono', 'activa'];
+    protected $fillable = ['edicion_id', 'nombre', 'descripcion', 'icono', 'activa', 'opciones_con_imagen'];
 
-    protected $casts = ['activa' => 'boolean'];
+    protected $casts = ['activa' => 'boolean', 'opciones_con_imagen' => 'boolean'];
 
     /** Inicial del nombre, usada como identificador visual de la categoría. */
     protected function inicial(): Attribute

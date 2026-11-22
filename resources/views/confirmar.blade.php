@@ -9,13 +9,16 @@
         <p class="text-muted mb-1">{{ $votacion->titulo }}</p>
         <div class="choice-box my-4">
             <span class="section-title">Votarás por</span>
+            @if($opcion->imagen_url)
+                <img src="{{ $opcion->imagen_url }}" alt="Foto de {{ $opcion->nombre }}" class="choice-photo">
+            @endif
             <div class="h4 mb-0 mt-1">{{ $opcion->nombre }}</div>
         </div>
         <p class="small text-muted">Una vez emitido, tu voto no podrá modificarse. <span class="pv">Regla pendiente de validación</span></p>
         <form method="post" action="{{ route('votacion.votar', $votacion) }}" class="d-grid gap-2">
             @csrf
             <input type="hidden" name="opcion_id" value="{{ $opcion->id }}">
-            <button class="btn btn-brand btn-lg">Confirmar mi voto</button>
+            <button class="btn btn-gold btn-lg fw-semibold"><i class="bi bi-check2-circle me-1"></i>Confirmar mi voto</button>
             <a class="btn btn-ghost" href="{{ route('votacion', $votacion) }}">Cambiar opción</a>
         </form>
     </div>

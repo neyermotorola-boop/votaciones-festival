@@ -5,7 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Notifications\RestablecerContrasena;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class User extends Authenticatable
 {
@@ -155,5 +159,32 @@ class User extends Authenticatable
     public function votos(): HasMany
     {
         return $this->hasMany(Voto::class);
+    }
+
+    /**
+     * Envía una notificación por correo sin afectar el flujo principal:
+     * si el servidor de correo falla, se registra en el log y la acción
+     * (registro, voto…) continúa normalmente.
+     */
+    public function notificarCorreo(Notification $notificacion): void
+    {
+        if (! config('festival.notificaciones_correo')) {
+            return;
+        }
+
+        try {
+            $this->notify($notificacion);
+        } catch (Throwable $e) {
+            Log::warning('No se pudo enviar el correo de notificación', [
+                'user_id' => $this->id,
+                'notificacion' => $notificacion::class,
+                'error' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    public function sendPasswordResetNotification(#[\SensitiveParameter] $token): void
+    {
+        $this->notify(new RestablecerContrasena($token));
     }
 }

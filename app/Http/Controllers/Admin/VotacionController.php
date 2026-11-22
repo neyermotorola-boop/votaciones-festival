@@ -9,6 +9,7 @@ use App\Models\Categoria;
 use App\Models\Opcion;
 use App\Models\Votacion;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class VotacionController extends Controller
 {
@@ -66,6 +67,7 @@ class VotacionController extends Controller
         if ($votacion->votos()->exists()) {
             return back()->with('error', 'No se puede eliminar una votación con votos; ciérrala.');
         }
+        $votacion->opciones->each->borrarImagen();
         $votacion->delete();
         Bitacora::registrar('Eliminar votación', $votacion->titulo);
 
@@ -99,14 +101,41 @@ class VotacionController extends Controller
 
     public function opcionStore(Request $request, Votacion $votacion)
     {
-        $datos = $request->validate([
-            'nombre' => ['required', 'string', 'max:160'],
-            'descripcion' => ['nullable', 'string', 'max:500'],
-        ]);
-        $votacion->opciones()->create($datos);
+        $conFoto = (bool) $votacion->categoria->opciones_con_imagen;
+        $datos = $this->validarOpcion($request, $conFoto ? 'required' : 'nullable');
+
+        $opcion = $votacion->opciones()->make($datos);
+        if ($request->hasFile('imagen')) {
+            $opcion->imagen = $this->guardarImagen($request);
+        }
+        $opcion->save();
         Bitacora::registrar('Agregar opción', $datos['nombre']);
 
         return back()->with('ok', 'Opción agregada.');
+    }
+
+    public function opcionUpdate(Request $request, Votacion $votacion, Opcion $opcion)
+    {
+        abort_unless($opcion->votacion_id === $votacion->id, 404);
+        $datos = $this->validarOpcion($request, 'nullable');
+
+        // Con votos no se cambia el nombre (evita confundir a quien ya votó); la foto y la descripción sí.
+        if ($opcion->votos()->exists() && $datos['nombre'] !== $opcion->nombre) {
+            return back()->with('error', 'Esta opción ya tiene votos: no se puede cambiar el nombre.');
+        }
+
+        $opcion->fill($datos);
+        if ($request->hasFile('imagen')) {
+            $opcion->borrarImagen();
+            $opcion->imagen = $this->guardarImagen($request);
+        } elseif ($request->boolean('quitar_imagen')) {
+            $opcion->borrarImagen();
+            $opcion->imagen = null;
+        }
+        $opcion->save();
+        Bitacora::registrar('Editar opción', $opcion->nombre);
+
+        return back()->with('ok', 'Opción actualizada.');
     }
 
     public function opcionDestroy(Votacion $votacion, Opcion $opcion)
@@ -115,10 +144,43 @@ class VotacionController extends Controller
         if ($opcion->votos()->exists()) {
             return back()->with('error', 'No se puede eliminar una opción que ya tiene votos.');
         }
+        $opcion->borrarImagen();
         $opcion->delete();
         Bitacora::registrar('Eliminar opción', $opcion->nombre);
 
         return back()->with('ok', 'Opción eliminada.');
+    }
+
+    private function validarOpcion(Request $request, string $reglaImagen): array
+    {
+        $formatos = implode(',', config('festival.imagen_formatos'));
+        $maxKb = config('festival.imagen_max_kb');
+
+        $datos = $request->validate([
+            'nombre' => ['required', 'string', 'max:160'],
+            'descripcion' => ['nullable', 'string', 'max:500'],
+            // Solo mapas de bits (sin SVG, que puede llevar scripts).
+            'imagen' => [$reglaImagen, 'file', 'image', "mimes:{$formatos}", "max:{$maxKb}", 'dimensions:min_width=80,min_height=80,max_width=6000,max_height=6000'],
+        ], [
+            'imagen.required' => 'Esta categoría requiere la foto del participante.',
+            'imagen.image' => 'El archivo debe ser una imagen.',
+            'imagen.mimes' => 'La foto debe ser JPG, PNG o WEBP.',
+            'imagen.max' => 'La foto no puede pesar más de '.round($maxKb / 1024, 1).' MB.',
+            'imagen.dimensions' => 'La foto debe medir entre 80 y 6000 píxeles por lado.',
+        ]);
+
+        // El archivo se procesa aparte (guardarImagen); aquí solo van los campos de texto.
+        unset($datos['imagen']);
+
+        return $datos;
+    }
+
+    /** Guarda la foto con un nombre aleatorio y devuelve la ruta relativa dentro de public/uploads. */
+    private function guardarImagen(Request $request): string
+    {
+        $archivo = $request->file('imagen');
+
+        return $archivo->storeAs('opciones', Str::random(32).'.'.$archivo->extension(), Opcion::DISCO);
     }
 
     private function validar(Request $request): array

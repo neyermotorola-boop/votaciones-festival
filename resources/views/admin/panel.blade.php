@@ -51,7 +51,7 @@
     </div>
     <div class="col-lg-6">
         <div class="card-f p-4 h-100">
-            <div class="card-head"><h2>Actividad reciente</h2><i class="bi bi-clock-history text-muted"></i></div>
+            <div class="card-head"><h2>Actividad reciente</h2>@if(auth()->user()->esAdmin())@include('partials.btn-excel', ['url' => route('admin.exportar.bitacora'), 'texto' => 'Bitácora', 'clase' => 'btn-sm'])@endif</div>
             <div class="list-f">
                 @forelse($recientes as $b)
                     <div class="item small">

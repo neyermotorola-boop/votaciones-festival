@@ -30,6 +30,16 @@ return [
 
     'disks' => [
 
+        // Fotos de participantes: se guardan directamente en public/uploads
+        // (no requiere "storage:link", que suele fallar en volúmenes de Windows).
+        'uploads' => [
+            'driver' => 'local',
+            'root' => public_path('uploads'),
+            'visibility' => 'public',
+            'throw' => false,
+            'report' => false,
+        ],
+
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app/private'),

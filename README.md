@@ -54,6 +54,7 @@ docker compose up --build
 ```
 - Sitio: http://localhost:8080
 - phpMyAdmin: http://localhost:8081
+- Buzón de correos de prueba (Mailpit): http://localhost:8025
 - Al iniciar, el contenedor instala dependencias, genera la clave, **ejecuta las migraciones** y **siembra los datos de prueba**.
 
 > Las credenciales de MySQL de `docker-compose.yml` son **ficticias y solo para desarrollo local**
@@ -232,3 +233,55 @@ Para evitar que alguien vote varias veces creando cuentas nuevas:
   `PublicoController::yaVoto()`, `DocumentoController`. Pruebas: `tests/Feature/DocumentoUnicoTest.php` (50 pruebas en total).
 - Nota de privacidad: el documento es un dato personal; su tratamiento debe estar cubierto por la política de datos (el texto legal está
   *pendiente de validación* con el cliente).
+
+## Identidad visual, correos, fotos, Excel y rendimiento
+
+### Colores de marca y logo
+| Uso | Color | Hex |
+|---|---|---|
+| Principal (botones, encabezado) | Rojo Festival | `#D3121B` |
+| Acento (destacados, "Votar") | Amarillo cañaguate | `#F2B705` |
+| Éxito ("Voto registrado") | Verde campo | `#2E7D32` |
+| Error / rechazo | Rojo vino | `#8E1B1B` |
+| Fondo | Crema | `#FAF7F0` |
+
+Definidos como variables en `public/css/app.css` (`--brand`, `--gold`, `--green`, `--red`, `--bg`), en el tema de correo
+`resources/views/vendor/mail/html/themes/festival.css` y en los encabezados de los Excel. El logo está en `public/img/logo-festival.png`.
+
+### Notificaciones por correo
+Se envían en cola (servicio `queue` de Docker; sin Docker: `php artisan queue:work`). Si el servidor de correo falla,
+el registro o el voto **no** se afectan.
+- **Bienvenida** al crear la cuenta.
+- **Comprobante de voto** (categoría, votación, opción, fecha y número de comprobante).
+- **Recuperación de contraseña** con enlace seguro de un solo uso que vence en 60 minutos ("¿Olvidaste tu contraseña?" en
+  el ingreso; la ruta anterior `/recuperar` redirige a este flujo). Nadie puede cambiar la contraseña de otra persona
+  solo con conocer su correo.
+
+Se pueden desactivar con `NOTIFICACIONES_CORREO=false`. En desarrollo todos los correos se ven en Mailpit.
+
+**Enviar correos reales con un servicio gratuito** (conexión cifrada STARTTLS, puerto 587). Edita `.env` y reinicia con
+`docker compose restart app queue`:
+
+- **Brevo** (300 correos/día gratis): crea la cuenta, verifica el remitente y genera una clave SMTP.
+  `MAIL_HOST=smtp-relay.brevo.com`, `MAIL_PORT=587`, `MAIL_USERNAME=<usuario SMTP>`, `MAIL_PASSWORD=<clave SMTP>`.
+- **Gmail** (≈500 correos/día): activa la verificación en dos pasos y crea una *contraseña de aplicación*.
+  `MAIL_HOST=smtp.gmail.com`, `MAIL_PORT=587`, `MAIL_USERNAME=tucuenta@gmail.com`, `MAIL_PASSWORD=<contraseña de aplicación>`.
+
+### Participantes con foto
+En **Categorías → Editar** activa *"Los participantes llevan foto"*. En esas categorías la foto es obligatoria al agregar
+una opción y se muestra junto al nombre al votar, al confirmar, en los resultados y en la consulta de votos. Las demás
+categorías siguen funcionando solo con texto. Formatos JPG, PNG o WEBP, máx. 2 MB (`IMAGEN_MAX_KB`); se guardan en
+`public/uploads/`. Cada opción se puede editar (cambiar o quitar foto); si ya tiene votos, su nombre no se puede cambiar.
+
+### Exportar a Excel
+Botón **Exportar Excel** en Ediciones, Categorías, Votaciones, opciones de cada votación y **Votos** (respeta los filtros
+de edición, categoría y votante). Cada exportación exige el mismo permiso que su sección; **Votantes** y **Bitácora**
+solo los exporta el administrador.
+
+### Rendimiento
+- OPcache y caché de rutas de PHP en la imagen Docker; `vendor/` en un volumen de Docker (en Windows/macOS leerlo desde
+  el disco compartido era lo más lento).
+- Caché de navegador y compresión gzip para CSS e imágenes; el CSS se versiona automáticamente.
+- Imagen de portada optimizada (228 KB → 25 KB).
+- Las pruebas dentro de Docker (`docker exec votaciones_app php artisan test`) usan SQLite en memoria y nunca tocan MySQL.
+

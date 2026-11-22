@@ -29,7 +29,7 @@ class CategoriaController extends Controller
     public function store(Request $request)
     {
         $datos = $this->validar($request);
-        $categoria = Categoria::create($datos + ['activa' => $request->boolean('activa')]);
+        $categoria = Categoria::create($datos + $this->interruptores($request));
         Bitacora::registrar('Crear categoría', $categoria->nombre);
 
         return redirect()->route('admin.categorias.index')->with('ok', 'Categoría creada.');
@@ -47,7 +47,7 @@ class CategoriaController extends Controller
         if ((int) $datos['edicion_id'] !== $categoria->edicion_id && $categoria->votaciones()->whereHas('votos')->exists()) {
             return back()->withInput()->withErrors(['edicion_id' => 'No se puede cambiar la edición de una categoría que ya tiene votos.']);
         }
-        $categoria->update($datos + ['activa' => $request->boolean('activa')]);
+        $categoria->update($datos + $this->interruptores($request));
         Bitacora::registrar('Editar categoría', $categoria->nombre);
 
         return redirect()->route('admin.categorias.index')->with('ok', 'Categoría actualizada.');
@@ -63,6 +63,14 @@ class CategoriaController extends Controller
         Bitacora::registrar('Eliminar categoría', $categoria->nombre);
 
         return back()->with('ok', 'Categoría eliminada.');
+    }
+
+    private function interruptores(Request $request): array
+    {
+        return [
+            'activa' => $request->boolean('activa'),
+            'opciones_con_imagen' => $request->boolean('opciones_con_imagen'),
+        ];
     }
 
     private function validar(Request $request, ?Categoria $categoria = null): array

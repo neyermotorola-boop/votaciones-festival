@@ -3,7 +3,13 @@
 @section('contenido')
 <header class="page-head d-flex flex-wrap justify-content-between align-items-end gap-3">
     <div><h1>Votos registrados</h1><p class="text-muted mb-0">Consulta administrativa de los votos guardados en MySQL.</p></div>
-    <span class="count-pill fs-6">{{ $votos->total() }} voto(s)</span>
+    <div class="d-flex flex-wrap align-items-center gap-2">
+        <span class="count-pill fs-6">{{ $votos->total() }} voto(s)</span>
+        @if(auth()->user()->esAdmin())
+            @include('partials.btn-excel', ['url' => route('admin.exportar.votantes'), 'texto' => 'Votantes'])
+        @endif
+        @include('partials.btn-excel', ['url' => route('admin.exportar.votos', array_filter($filtros)), 'texto' => 'Exportar votos'])
+    </div>
 </header>
 
 <form method="get" class="card-f p-3 mb-3">
@@ -22,6 +28,7 @@
             <input id="q" name="q" class="form-control" value="{{ $filtros['q'] ?? '' }}" placeholder="Buscar..."></div>
         <div class="col-md-2 d-grid"><button class="btn btn-brand"><i class="bi bi-search me-1"></i>Filtrar</button></div>
     </div>
+    @if(array_filter($filtros))<div class="form-text mt-2">La exportación a Excel aplica los filtros actuales.</div>@endif
 </form>
 
 <div class="card-f p-3 table-responsive">
@@ -37,7 +44,7 @@
             <td>{{ $v->edicion->anio }}</td>
             <td>{{ $v->categoria->nombre }}</td>
             <td>{{ $v->votacion->titulo }}</td>
-            <td><span class="badge-estado est-abierta">{{ $v->opcion->nombre }}</span></td>
+            <td><span class="d-inline-flex align-items-center gap-2">@if($v->opcion->imagen_url)<img src="{{ $v->opcion->imagen_url }}" alt="" class="opt-thumb sm" loading="lazy">@endif<span class="badge-estado est-abierta">{{ $v->opcion->nombre }}</span></span></td>
         </tr>
     @empty
         <tr class="empty"><td colspan="7"><div class="empty-state"><i class="bi bi-inbox"></i>No hay votos con esos filtros.</div></td></tr>

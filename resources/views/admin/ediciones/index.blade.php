@@ -3,7 +3,10 @@
 @section('contenido')
 <header class="page-head d-flex flex-wrap justify-content-between align-items-end gap-3">
     <div><h1>Ediciones</h1><p class="text-muted mb-0">Ediciones anuales del Festival.</p></div>
-    <a class="btn btn-brand" href="{{ route('admin.ediciones.create') }}"><i class="bi bi-plus-lg me-1"></i>Nueva edición</a>
+    <div class="d-flex flex-wrap gap-2">
+        @include('partials.btn-excel', ['url' => route('admin.exportar.ediciones')])
+        <a class="btn btn-brand" href="{{ route('admin.ediciones.create') }}"><i class="bi bi-plus-lg me-1"></i>Nueva edición</a>
+    </div>
 </header>
 <div class="card-f p-3 table-responsive">
 <table class="table table-f align-middle">

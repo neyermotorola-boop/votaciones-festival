@@ -4,13 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Bitacora;
 use App\Models\User;
+use App\Notifications\Bienvenida;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
+use Throwable;
 
 class AuthController extends Controller
 {
@@ -47,6 +50,8 @@ class AuthController extends Controller
             // Dos registros simultáneos con el mismo documento o correo: MySQL rechaza el segundo.
             return back()->withInput()->withErrors(['documento' => 'Ya existe una cuenta con ese documento o correo.']);
         }
+
+        $user->notificarCorreo(new Bienvenida);
 
         Auth::login($user);
         $request->session()->regenerate();
@@ -93,46 +98,6 @@ class AuthController extends Controller
         return redirect()->intended(Auth::user()->tieneAccesoPanel() ? route('admin.panel') : route('home'));
     }
 
-    public function recuperarForm()
-    {
-        return view('auth.recuperar');
-    }
-
-    /** Genera una contraseña temporal y la envía al correo registrado de la cuenta. */
-    public function recuperar(Request $request)
-    {
-        $datos = $request->validate([
-            'email' => ['required', 'email'],
-        ], [
-            'email.required' => 'Ingresa tu correo electrónico.',
-            'email.email' => 'El correo no tiene un formato válido.',
-        ]);
-
-        $user = User::where('email', $datos['email'])->where('activo', true)->first();
-
-        if ($user) {
-            $temporal = Str::password(10, symbols: false);
-
-            try {
-                Mail::raw(
-                    "Hola {$user->name},\n\n".
-                    'Solicitaste recuperar tu contraseña en '.config('app.name')."\n\n".
-                    "Tu contraseña temporal es: {$temporal}\n\n".
-                    "Ingresa con ella y no la compartas. Si no fuiste tú, ignora este mensaje.\n",
-                    fn ($m) => $m->to($user->email)->subject('Recuperación de contraseña')
-                );
-                // Solo se cambia la clave si el correo pudo enviarse.
-                $user->forceFill(['password' => $temporal])->save();
-                Bitacora::registrar('Recuperación de contraseña', $request->ip());
-            } catch (\Throwable $e) {
-                Log::error('No se pudo enviar la contraseña temporal: '.$e->getMessage());
-            }
-        }
-
-        // Respuesta idéntica exista o no la cuenta, para no revelar qué correos están registrados.
-        return redirect()->route('login')->with('ok', 'Si el correo está registrado, te enviamos una contraseña temporal. Revisa tu bandeja de entrada.');
-    }
-
     public function logout(Request $request)
     {
         Auth::logout();
@@ -140,5 +105,59 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('home');
+    }
+
+    public function olvideForm()
+    {
+        return view('auth.olvide');
+    }
+
+    /** Envía el enlace de recuperación. Responde igual exista o no el correo (no revela cuentas). */
+    public function olvide(Request $request)
+    {
+        $request->validate(['email' => ['required', 'email']], [
+            'email.required' => 'Ingresa tu correo electrónico.',
+            'email.email' => 'El correo no tiene un formato válido.',
+        ]);
+
+        try {
+            Password::sendResetLink($request->only('email'));
+        } catch (Throwable $e) {
+            Log::warning('No se pudo enviar el enlace de recuperación', ['error' => $e->getMessage()]);
+        }
+
+        return back()->with('ok', 'Si el correo está registrado, te enviamos un enlace para restablecer la contraseña. Revisa también la carpeta de spam.');
+    }
+
+    public function restablecerForm(Request $request, string $token)
+    {
+        return view('auth.restablecer', ['token' => $token, 'email' => $request->query('email')]);
+    }
+
+    public function restablecer(Request $request)
+    {
+        $request->validate([
+            'token' => ['required'],
+            'email' => ['required', 'email'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ], [
+            'password.min' => 'La contraseña debe tener al menos 8 caracteres.',
+            'password.confirmed' => 'Las contraseñas no coinciden.',
+        ]);
+
+        $estado = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function (User $user, string $password) {
+                $user->forceFill(['password' => $password, 'remember_token' => Str::random(60)])->save();
+                event(new PasswordReset($user));
+                Bitacora::registrar('Recuperación de contraseña', $user->email);
+            }
+        );
+
+        if ($estado !== Password::PASSWORD_RESET) {
+            return back()->withErrors(['email' => 'El enlace no es válido o ya venció. Solicita uno nuevo.'])->onlyInput('email');
+        }
+
+        return redirect()->route('login')->with('ok', 'Contraseña actualizada. Ya puedes ingresar.');
     }
 }

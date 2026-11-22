@@ -57,6 +57,11 @@
                     <input class="opt-input visually-hidden" type="radio" name="opcion_id" id="o{{ $o->id }}" value="{{ $o->id }}" required @disabled($limite || $ya || ! auth()->check())>
                     <label class="opt-card gap-3 align-items-center" for="o{{ $o->id }}">
                         <span class="dot"></span>
+                        @if($o->imagen_url)
+                            <img src="{{ $o->imagen_url }}" alt="Foto de {{ $o->nombre }}" class="opt-photo" loading="lazy">
+                        @elseif($votacion->categoria->opciones_con_imagen)
+                            <span class="opt-photo opt-thumb-empty" aria-hidden="true">{{ $o->inicial }}</span>
+                        @endif
                         <span class="flex-grow-1"><b>{{ $o->nombre }}</b>
                             @if($o->descripcion)<br><small class="text-muted">{{ $o->descripcion }}</small>@endif</span>
                         @if($ya)<span class="badge-estado est-abierta">Tu voto</span>@endif
@@ -65,7 +70,7 @@
             @endforeach
         </div>
         @if(auth()->check() && ! $limite)
-            <button class="btn btn-brand btn-lg w-100">Continuar <i class="bi bi-arrow-right ms-1"></i></button>
+            <button class="btn btn-gold btn-lg w-100 fw-semibold">Votar <i class="bi bi-arrow-right ms-1"></i></button>
         @endif
     </form>
 @elseif($votacion->estadoEfectivo() === 'programada')
@@ -79,7 +84,7 @@
     <div class="card-f p-4 p-md-5">
         @foreach($resultados as $r)
             <div class="{{ $loop->last ? '' : 'mb-4' }}">
-                <div class="d-flex justify-content-between mb-2"><span class="fw-semibold">{{ $r->nombre }}</span><span><b>{{ $r->porcentaje }}%</b> <span class="text-muted small">· {{ $r->votos_count }} votos</span></span></div>
+                <div class="d-flex justify-content-between mb-2"><span class="fw-semibold d-flex align-items-center gap-2">@if($r->imagen_url)<img src="{{ $r->imagen_url }}" alt="" class="opt-thumb sm" loading="lazy">@endif{{ $r->nombre }}</span><span><b>{{ $r->porcentaje }}%</b> <span class="text-muted small">· {{ $r->votos_count }} votos</span></span></div>
                 <div class="bar-wrap"><div class="bar-fill {{ $loop->first ? 'top' : '' }}" style="width:{{ $r->porcentaje }}%"></div></div>
             </div>
         @endforeach
